@@ -7,7 +7,7 @@ generation of IV data.
 """
 
 from dataclasses import dataclass, field, fields
-from typing import List, Optional, Literal
+from typing import List, Optional
 from enum import Enum
 
 
