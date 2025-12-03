@@ -113,7 +113,7 @@ class Implementation:
     """Function implementation details."""
 
     name: str
-    language: Language
+    language: Optional[Language] = None
 
 
 @dataclass
