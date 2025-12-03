@@ -2,7 +2,7 @@
 
 ## General
 
-Template Processor (TP), created as a part of \"Model-Based Execution Platform for Space Applications\" project (contract 4000146882/24/NL/KK) financed by the European Space Agency.
+Template Processor (TP), created as a part of "Model-Based Execution Platform for Space Applications" project (contract 4000146882/24/NL/KK) financed by the European Space Agency.
 
 TP is a template processing engine developed for TASTE Document Generator. Its main function is to consume the provided inputs (e.g., TASTE Interface View data), instantiate templates and translate them into format that can be integrated deliverable documents. Base requirements are provided in MBEP-N7S-EP-SRS, while the overall design is documented in MBEP-N7S-EP-SDD.
 
