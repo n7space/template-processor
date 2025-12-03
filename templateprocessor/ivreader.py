@@ -237,7 +237,7 @@ class IVReader:
         """Parse an Implementation element."""
         return Implementation(
             name=elem.get("name", ""),
-            language=elem.get("language", ""),
+            language=Language(elem.get("language", "")),
         )
 
     def _parse_connection(self, elem: ET.Element) -> Connection:
