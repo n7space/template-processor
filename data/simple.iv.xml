@@ -1,0 +1,195 @@
+<InterfaceView version="1.3" asn1file="simple.acn" UiFile="interfaceview.ui.xml" modifierHash="383508e">
+<Function id="{53133f99-bb5f-4254-99ad-379de605d61a}" name="host" is_type="NO" language="SDL" default_implementation="default" fixed_system_element="NO" required_system_element="NO" instances_min="1" instances_max="1" startup_priority="1">
+    <Property name="TASTE_IV_Properties::Default_Codegen" value="Ada"/>
+<Provided_Interface id="{f38ba424-4cdb-4e1b-b189-e016cbc11a3d}" name="child1_if" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" wcet="0" stack_size="1024" queue_size="1" miat="0" priority="1">
+    <Input_Parameter name="p1" type="T-Int32" encoding="NATIVE"/>
+</Provided_Interface>
+
+<Required_Interface id="{086eb83f-8a73-4f8f-aed3-bb0435fb94f2}" name="child2_if" kind="Protected" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" wcet="0">
+    <Input_Parameter name="p1" type="T-Int32" encoding="NATIVE"/>
+    <Input_Parameter name="p2" type="T-Int32" encoding="NATIVE"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+<Function id="{c4c8ef89-3a52-4407-8154-e8c71c7a5638}" name="child1" is_type="NO" language="SDL" default_implementation="default" fixed_system_element="NO" required_system_element="NO" instances_min="1" instances_max="1" startup_priority="1">
+    <Property name="TASTE_IV_Properties::Default_Codegen" value="Ada"/>
+<Provided_Interface id="{439ee9c8-eb1b-4fe5-84f3-7a95e5d4846f}" name="child1_if" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" stack_size="1024" wcet="0" queue_size="1" miat="0" priority="1">
+    <Input_Parameter name="p1" type="T-Int32" encoding="NATIVE"/>
+</Provided_Interface>
+
+<Required_Interface id="{48563c56-c040-4bf0-ab45-0e424833c4a5}" name="chain_if" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" stack_size="1024" wcet="0" queue_size="1" miat="0" priority="1">
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+    <Implementations>
+        <Implementation name="default" language="SDL"/>
+    </Implementations>
+</Function>
+
+<Function id="{48ca0f02-a391-4793-b870-d2f0210d3789}" name="child2" is_type="NO" language="SDL" default_implementation="default" fixed_system_element="NO" required_system_element="NO" instances_min="1" instances_max="1" startup_priority="1">
+    <Property name="TASTE_IV_Properties::Default_Codegen" value="Ada"/>
+<Provided_Interface id="{e9b38ea3-cfb7-4421-ba67-e2daa9fbcaa1}" name="chain_if" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" stack_size="1024" wcet="0" queue_size="1" miat="0" priority="1">
+</Provided_Interface>
+
+<Required_Interface id="{e1db005a-4513-4daf-823e-d5f9f265e993}" name="child2_if" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false">
+    <Input_Parameter name="p1" type="T-Int32" encoding="NATIVE"/>
+    <Input_Parameter name="p2" type="T-Int32" encoding="NATIVE"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="false"/>
+</Required_Interface>
+
+    <Implementations>
+        <Implementation name="default" language="SDL"/>
+    </Implementations>
+</Function>
+
+<Connection id="{b36255e8-bbe6-4511-b125-4ce5278c1541}" required_system_element="NO">
+    <Source iface_id="{f38ba424-4cdb-4e1b-b189-e016cbc11a3d}" func_name="host" pi_name="child1_if" />
+    <Target iface_id="{439ee9c8-eb1b-4fe5-84f3-7a95e5d4846f}" func_name="child1" pi_name="child1_if" />
+</Connection>
+
+<Connection id="{84798e2f-8cda-40b8-951e-b3a1d7fc27ec}" name="child1_chain_if____child2_chain_if" required_system_element="NO">
+    <Source iface_id="{48563c56-c040-4bf0-ab45-0e424833c4a5}" func_name="child1" ri_name="chain_if" />
+    <Target iface_id="{e9b38ea3-cfb7-4421-ba67-e2daa9fbcaa1}" func_name="child2" pi_name="chain_if" />
+</Connection>
+
+<Connection id="{a832de89-bad0-4e2f-9a6f-d5702b3a20c2}" required_system_element="NO">
+    <Source iface_id="{e1db005a-4513-4daf-823e-d5f9f265e993}" func_name="child2" ri_name="child2_if" />
+    <Target iface_id="{086eb83f-8a73-4f8f-aed3-bb0435fb94f2}" func_name="host" ri_name="child2_if" />
+</Connection>
+
+    <Implementations>
+        <Implementation name="default" language="SDL"/>
+    </Implementations>
+</Function>
+
+<Function id="{a78815f3-9fc5-414d-a48e-457733ec8f04}" name="WorkerType" is_type="YES" type_language="SDL" fixed_system_element="NO" required_system_element="NO" instances_min="1" instances_max="1" startup_priority="1">
+    <Property name="TASTE_IV_Properties::Default_Codegen" value="Ada"/>
+<Provided_Interface id="{cb05c760-d2c4-47c3-a493-ecc5378985f1}" name="impulse" kind="Cyclic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" simulink_full_interface_ref="" stack_size="1024" wcet="0" dispatch_offset="50" period="100" priority="1">
+</Provided_Interface>
+
+<Provided_Interface id="{f9d31d1e-ac85-4f28-a3da-7889b66d3624}" name="submit_job" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" simulink_full_interface_ref="" stack_size="1024" wcet="0" queue_size="1" miat="0" priority="1">
+</Provided_Interface>
+
+</Function>
+
+<Function id="{147ee598-e3fe-4726-92e7-178798710f62}" name="Worker" is_type="NO" instance_of="WorkerType" language="SDL" default_implementation="default" fixed_system_element="NO" required_system_element="NO" instances_min="1" instances_max="16" startup_priority="1">
+    <Property name="TASTE_IV_Properties::Default_Codegen" value="Ada"/>
+<Provided_Interface id="{ed8648fa-2186-4317-a9ca-6c5959b7a877}" name="impulse" kind="Cyclic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" simulink_full_interface_ref="" stack_size="1024" wcet="0" dispatch_offset="50" period="100" priority="1">
+</Provided_Interface>
+
+<Provided_Interface id="{43491ec7-432b-405c-87f5-df6c8f20d560}" name="submit_job" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" simulink_full_interface_ref="" stack_size="1024" wcet="0" queue_size="1" miat="0" priority="1">
+</Provided_Interface>
+
+    <Implementations>
+        <Implementation name="default" language="SDL"/>
+    </Implementations>
+</Function>
+
+<Function id="{863f0a68-0e74-480f-84fc-1cfd482b7b6e}" name="master" is_type="NO" language="SDL" default_implementation="default" fixed_system_element="NO" required_system_element="NO" instances_min="1" instances_max="1" startup_priority="1">
+    <Property name="TASTE_IV_Properties::Default_Codegen" value="Ada"/>
+<Provided_Interface id="{7e445826-f9c8-48be-bbee-207181a9f5b9}" name="trigger" kind="Cyclic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" stack_size="1024" wcet="0" priority="1">
+</Provided_Interface>
+
+<Required_Interface id="{84344aca-e04d-46b7-b709-1b5d7da83620}" name="sporadic_if" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" wcet="0" stack_size="1024" queue_size="1" miat="0" priority="1">
+    <Input_Parameter name="p1" type="T-Int32" encoding="NATIVE"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+<Required_Interface id="{5e00bea5-e569-49f8-bad0-bf5d0ad6a035}" name="protected_if" kind="Protected" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" wcet="0">
+    <Input_Parameter name="p1" type="T-Int32" encoding="ACN"/>
+    <Output_Parameter name="p2" type="T-Int32" encoding="UPER"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+<Required_Interface id="{8c3ea92f-0ae3-4636-a827-8bd9902af81e}" name="unprotected" kind="Unprotected" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" wcet="0">
+    <Input_Parameter name="p1" type="T-Int32" encoding="NATIVE"/>
+    <Input_Parameter name="p2" type="T-Int32" encoding="UPER"/>
+    <Input_Parameter name="p3" type="T-Int32" encoding="ACN"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+<Required_Interface id="{e5b8eaa2-ead8-414e-8b44-3a01b917ef6a}" name="child1_if" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" wcet="0" stack_size="1024" queue_size="1" miat="0" priority="1">
+    <Input_Parameter name="p1" type="T-Int32" encoding="NATIVE"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+    <Implementations>
+        <Implementation name="default" language="SDL"/>
+    </Implementations>
+</Function>
+
+<Function id="{3945a1fb-af62-4b21-89df-1e5a835e33ed}" name="slave" is_type="NO" language="SDL" default_implementation="default" fixed_system_element="NO" required_system_element="NO" instances_min="1" instances_max="1" startup_priority="1">
+    <Property name="TASTE_IV_Properties::Default_Codegen" value="Ada"/>
+<Provided_Interface id="{e45cae09-5df9-421e-831d-3dd4e2c0531c}" name="sporadic_if" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" wcet="0" stack_size="1024" queue_size="1" miat="0" priority="1">
+    <Input_Parameter name="p1" type="T-Int32" encoding="NATIVE"/>
+</Provided_Interface>
+
+<Provided_Interface id="{6dfc6cd0-7bab-4e7a-b34e-4caf48470c6d}" name="protected_if" kind="Protected" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" wcet="0">
+    <Input_Parameter name="p1" type="T-Int32" encoding="ACN"/>
+    <Output_Parameter name="p2" type="T-Int32" encoding="UPER"/>
+</Provided_Interface>
+
+<Provided_Interface id="{a43da7ab-2f94-4f89-a766-bf4874142e6d}" name="unprotected" kind="Unprotected" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" wcet="0">
+    <Input_Parameter name="p1" type="T-Int32" encoding="NATIVE"/>
+    <Input_Parameter name="p2" type="T-Int32" encoding="UPER"/>
+    <Input_Parameter name="p3" type="T-Int32" encoding="ACN"/>
+</Provided_Interface>
+
+<Provided_Interface id="{a41f3ef7-4887-4947-8eb3-2e29517abf49}" name="child2_if" kind="Protected" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" wcet="0">
+    <Input_Parameter name="p1" type="T-Int32" encoding="NATIVE"/>
+    <Input_Parameter name="p2" type="T-Int32" encoding="NATIVE"/>
+</Provided_Interface>
+
+<Required_Interface id="{c232ae33-9e34-41e9-b335-2d36f96fb05e}" name="submit_job" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" simulink_full_interface_ref="" stack_size="1024" wcet="0" queue_size="1" miat="0" priority="1">
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+    <Implementations>
+        <Implementation name="default" language="C"/>
+    </Implementations>
+</Function>
+
+<Connection id="{d85163df-c931-455b-954d-664fa0778b75}" required_system_element="NO">
+    <Source iface_id="{086eb83f-8a73-4f8f-aed3-bb0435fb94f2}" func_name="host" ri_name="child2_if" />
+    <Target iface_id="{a41f3ef7-4887-4947-8eb3-2e29517abf49}" func_name="slave" pi_name="child2_if" />
+</Connection>
+
+<Connection id="{60c19bd1-7b8f-44d1-b85a-739a18b18239}" name="master_sporadic_if____slave_sporadic_if" required_system_element="NO">
+    <Source iface_id="{84344aca-e04d-46b7-b709-1b5d7da83620}" func_name="master" ri_name="sporadic_if" />
+    <Target iface_id="{e45cae09-5df9-421e-831d-3dd4e2c0531c}" func_name="slave" pi_name="sporadic_if" />
+</Connection>
+
+<Connection id="{119737d1-2524-408e-b688-c3124a3084f4}" name="master_protected_if____slave_protected_if" required_system_element="NO">
+    <Source iface_id="{5e00bea5-e569-49f8-bad0-bf5d0ad6a035}" func_name="master" ri_name="protected_if" />
+    <Target iface_id="{6dfc6cd0-7bab-4e7a-b34e-4caf48470c6d}" func_name="slave" pi_name="protected_if" />
+</Connection>
+
+<Connection id="{c8524fe2-a55b-458c-b73f-bc8a6a1585aa}" required_system_element="NO">
+    <Source iface_id="{c232ae33-9e34-41e9-b335-2d36f96fb05e}" func_name="slave" ri_name="submit_job" />
+    <Target iface_id="{43491ec7-432b-405c-87f5-df6c8f20d560}" func_name="Worker" pi_name="submit_job" />
+</Connection>
+
+<Connection id="{518e2cea-37bc-4aa4-af1c-b5874c1248f1}" name="master_unprotected____slave_unprotected" required_system_element="NO">
+    <Source iface_id="{8c3ea92f-0ae3-4636-a827-8bd9902af81e}" func_name="master" ri_name="unprotected" />
+    <Target iface_id="{a43da7ab-2f94-4f89-a766-bf4874142e6d}" func_name="slave" pi_name="unprotected" />
+</Connection>
+
+<Connection id="{0ed63357-7a9b-40f0-8392-27844d53ef6b}" required_system_element="NO">
+    <Source iface_id="{e5b8eaa2-ead8-414e-8b44-3a01b917ef6a}" func_name="master" ri_name="child1_if" />
+    <Target iface_id="{f38ba424-4cdb-4e1b-b189-e016cbc11a3d}" func_name="host" pi_name="child1_if" />
+</Connection>
+
+<Comment id="{3b14f3b0-d35b-4dfb-95db-dd29ae6608fa}" name="Sample project used for IV structure reference" required_system_element="NO">
+</Comment>
+
+<Layer name="default" is_visible="true"/>
+
+</InterfaceView>
