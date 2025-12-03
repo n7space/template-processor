@@ -1,0 +1,4 @@
+# Core dependencies for Template Processor
+# Template processing engine for TASTE Document Generator
+
+
