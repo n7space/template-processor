@@ -244,7 +244,7 @@ class IVReader:
         """Parse a Connection element."""
         connection = Connection(
             id=elem.get("id", ""),
-            required_system_element=elem.get("required_system_element", "NO"),
+            required_system_element=elem.get("required_system_element", "NO") == "YES",
             name=elem.get("name"),
         )
 
