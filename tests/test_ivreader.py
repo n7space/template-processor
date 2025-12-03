@@ -37,7 +37,7 @@ class TestIVReader:
         assert isinstance(iv, InterfaceView)
         assert iv.version == "1.3"
         assert iv.asn1file == "simple.acn"
-        assert iv.UiFile == "interfaceview.ui.xml"
+        assert iv.uiFile == "interfaceview.ui.xml"
 
         # Verify functions were parsed
         assert len(iv.functions) > 0
@@ -64,7 +64,7 @@ class TestIVReader:
         assert isinstance(iv, InterfaceView)
         assert iv.version == "1.3"
         assert iv.asn1file == "simple.acn"
-        assert iv.UiFile == "interfaceview.ui.xml"
+        assert iv.uiFile == "interfaceview.ui.xml"
 
         # Verify functions were parsed
         assert len(iv.functions) > 0

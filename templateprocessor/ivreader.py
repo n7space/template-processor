@@ -87,7 +87,7 @@ class IVReader:
         iv = InterfaceView(
             version=root.get("version", ""),
             asn1file=root.get("asn1file", ""),
-            UiFile=root.get("UiFile", ""),
+            uiFile=root.get("UiFile", ""),
             modifierHash=root.get("modifierHash", ""),
         )
 
