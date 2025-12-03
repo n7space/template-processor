@@ -7,7 +7,7 @@ and construct InterfaceView data model instances.
 
 import xml.etree.ElementTree as ET
 from pathlib import Path
-from typing import Union, Optional
+from typing import Union
 
 from templateprocessor.iv import (
     InterfaceView,
@@ -237,14 +237,14 @@ class IVReader:
         """Parse an Implementation element."""
         return Implementation(
             name=elem.get("name", ""),
-            language=elem.get("language", ""),
+            language=Language(elem.get("language", "")),
         )
 
     def _parse_connection(self, elem: ET.Element) -> Connection:
         """Parse a Connection element."""
         connection = Connection(
             id=elem.get("id", ""),
-            required_system_element=elem.get("required_system_element", "NO"),
+            required_system_element=elem.get("required_system_element", "NO") == "YES",
             name=elem.get("name"),
         )
 
@@ -277,7 +277,7 @@ class IVReader:
         return Comment(
             id=elem.get("id", ""),
             name=elem.get("name", ""),
-            required_system_element=elem.get("required_system_element", "NO"),
+            required_system_element=elem.get("required_system_element", "NO") == "YES",
         )
 
     def _parse_layer(self, elem: ET.Element) -> Layer:

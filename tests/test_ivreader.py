@@ -177,15 +177,15 @@ class TestIVReader:
         assert len(unprotected_ri.input_parameters) == 3
 
         # Verify different encodings
-        unprotected_ri.input_parameters[0].name == "p1"
-        unprotected_ri.input_parameters[0].type == "T-Int32"
-        unprotected_ri.input_parameters[0].encoding == Encoding.NATIVE
-        unprotected_ri.input_parameters[1].name == "p2"
-        unprotected_ri.input_parameters[1].type == "T-Int32"
-        unprotected_ri.input_parameters[1].encoding == Encoding.UPER
-        unprotected_ri.input_parameters[2].name == "p3"
-        unprotected_ri.input_parameters[2].type == "T-Int32"
-        unprotected_ri.input_parameters[2].encoding == Encoding.ACN
+        assert unprotected_ri.input_parameters[0].name == "p1"
+        assert unprotected_ri.input_parameters[0].type == "T-Int32"
+        assert unprotected_ri.input_parameters[0].encoding == Encoding.NATIVE
+        assert unprotected_ri.input_parameters[1].name == "p2"
+        assert unprotected_ri.input_parameters[1].type == "T-Int32"
+        assert unprotected_ri.input_parameters[1].encoding == Encoding.UPER
+        assert unprotected_ri.input_parameters[2].name == "p3"
+        assert unprotected_ri.input_parameters[2].type == "T-Int32"
+        assert unprotected_ri.input_parameters[2].encoding == Encoding.ACN
 
     def test_read_output_parameters(self):
         """Test parsing interface with output parameters."""

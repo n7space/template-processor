@@ -6,8 +6,8 @@ TASTE Interface View XML files, allowing for parsing, manipulation, and
 generation of IV data.
 """
 
-from dataclasses import dataclass, field, fields
-from typing import List, Optional, Literal
+from dataclasses import dataclass, field
+from typing import List, Optional
 from enum import Enum
 
 
@@ -113,7 +113,7 @@ class Implementation:
     """Function implementation details."""
 
     name: str
-    language: Language
+    language: Optional[Language] = None
 
 
 @dataclass
@@ -123,7 +123,7 @@ class Function:
     id: str
     name: str
     is_type: bool
-    language: Language
+    language: Optional[Language] = None
     default_implementation: str = "default"
     fixed_system_element: bool = False
     required_system_element: bool = False
@@ -169,9 +169,9 @@ class Connection:
 
     id: str
     required_system_element: bool = False
-    name: str = None
-    source: ConnectionSource = None
-    target: ConnectionTarget = None
+    name: Optional[str] = None
+    source: Optional[ConnectionSource] = None
+    target: Optional[ConnectionTarget] = None
 
 
 @dataclass
@@ -202,7 +202,7 @@ class InterfaceView:
 
     version: str
     asn1file: str
-    UiFile: str
+    uiFile: str
     modifierHash: str
     functions: List[Function] = field(default_factory=list)
     connections: List[Connection] = field(default_factory=list)
