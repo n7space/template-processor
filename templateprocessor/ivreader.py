@@ -7,7 +7,7 @@ and construct InterfaceView data model instances.
 
 import xml.etree.ElementTree as ET
 from pathlib import Path
-from typing import Union, Optional
+from typing import Union
 
 from templateprocessor.iv import (
     InterfaceView,
