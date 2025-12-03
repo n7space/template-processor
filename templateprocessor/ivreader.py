@@ -277,7 +277,7 @@ class IVReader:
         return Comment(
             id=elem.get("id", ""),
             name=elem.get("name", ""),
-            required_system_element=elem.get("required_system_element", "NO"),
+            required_system_element=elem.get("required_system_element", "NO") == "YES",
         )
 
     def _parse_layer(self, elem: ET.Element) -> Layer:
