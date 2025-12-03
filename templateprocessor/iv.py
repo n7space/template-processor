@@ -6,7 +6,7 @@ TASTE Interface View XML files, allowing for parsing, manipulation, and
 generation of IV data.
 """
 
-from dataclasses import dataclass, field, fields
+from dataclasses import dataclass, field
 from typing import List, Optional
 from enum import Enum
 
