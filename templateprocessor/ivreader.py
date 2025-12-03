@@ -119,9 +119,9 @@ class IVReader:
             id=elem.get("id", ""),
             name=elem.get("name", ""),
             is_type=elem.get("is_type", "NO") == "YES",
-            language=Language(elem.get("language", ""))
-            if elem.get("language")
-            else None,
+            language=(
+                Language(elem.get("language", "")) if elem.get("language") else None
+            ),
             default_implementation=elem.get("default_implementation", "default"),
             fixed_system_element=elem.get("fixed_system_element", "NO") == "YES",
             required_system_element=elem.get("required_system_element", "NO") == "YES",
@@ -129,9 +129,11 @@ class IVReader:
             instances_max=int(elem.get("instances_max", "1")),
             startup_priority=int(elem.get("startup_priority", "1")),
             instance_of=elem.get("instance_of"),
-            type_language=Language(elem.get("type_language"))
-            if elem.get("type_language")
-            else None,
+            type_language=(
+                Language(elem.get("type_language"))
+                if elem.get("type_language")
+                else None
+            ),
         )
 
         # Parse properties
@@ -184,9 +186,11 @@ class IVReader:
             queue_size=int(elem.get("queue_size")) if elem.get("queue_size") else None,
             miat=int(elem.get("miat")) if elem.get("miat") else None,
             period=int(elem.get("period")) if elem.get("period") else None,
-            dispatch_offset=int(elem.get("dispatch_offset"))
-            if elem.get("dispatch_offset")
-            else None,
+            dispatch_offset=(
+                int(elem.get("dispatch_offset"))
+                if elem.get("dispatch_offset")
+                else None
+            ),
             priority=int(elem.get("priority")) if elem.get("priority") else None,
         )
 
