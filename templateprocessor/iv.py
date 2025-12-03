@@ -169,9 +169,9 @@ class Connection:
 
     id: str
     required_system_element: bool = False
-    name: str = None
-    source: ConnectionSource = None
-    target: ConnectionTarget = None
+    name: Optional[str] = None
+    source: Optional[ConnectionSource] = None
+    target: Optional[ConnectionTarget] = None
 
 
 @dataclass
