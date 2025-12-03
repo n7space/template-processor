@@ -123,7 +123,7 @@ class Function:
     id: str
     name: str
     is_type: bool
-    language: Language
+    language: Optional[Language] = None
     default_implementation: str = "default"
     fixed_system_element: bool = False
     required_system_element: bool = False
