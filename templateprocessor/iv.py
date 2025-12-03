@@ -202,7 +202,7 @@ class InterfaceView:
 
     version: str
     asn1file: str
-    UiFile: str
+    uiFile: str
     modifierHash: str
     functions: List[Function] = field(default_factory=list)
     connections: List[Connection] = field(default_factory=list)
