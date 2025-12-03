@@ -1,5 +1,5 @@
 BLACK=black
-PYTHON= ?= python3
+PYTHON ?= python3
 
 .PHONY : \
 	check \
