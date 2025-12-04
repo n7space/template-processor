@@ -1,0 +1,6 @@
+# Core dependencies for Template Processor
+# Template processing engine for TASTE Document Generator
+pytest==7.4.2
+black==24.3.0
+mako==1.3.10
+
