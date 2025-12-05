@@ -1,0 +1,15 @@
+ID;Name;PTC;PFC;Memory Address;Memory Name;Default Sampling Interval;Default Sampling Interval Value;Default Value;Default Value Type
+0;op00 null parameter;3;14;0;ram memory;Time Interval;Default Sampling Interval#{ t-field {day 0, milisecond 1000, submilisecond 0}};Default Value Type#{ field-data '00000000'H };Parameter Value
+1;op01 current velocity horizontal;5;1;0;ram memory;Time Interval;Default Sampling Interval#{ t-field {day 0, milisecond 100, submilisecond 0}};Default Value Type#{ field-data '00000000'H };Parameter Value
+2;op02 current velocity vertical;5;1;4;ram memory;Time Interval;Default Sampling Interval#{ t-field {day 0, milisecond 100, submilisecond 0}};Default Value Type#{ field-data '00000000'H };Parameter Value
+3;op03 target velocity horizontal;5;1;8;ram memory;Time Interval;Default Sampling Interval#{ t-field {day 0, milisecond 100, submilisecond 0}};Default Value Type#{ field-data '00000000'H };Parameter Value
+4;op04 target velocity vertical;5;1;12;ram memory;Time Interval;Default Sampling Interval#{ t-field {day 0, milisecond 100, submilisecond 0}};Default Value Type#{ field-data '00000000'H };Parameter Value
+5;op05 current altitude;5;1;48;ram memory;Time Interval;Default Sampling Interval#{ t-field {day 0, milisecond 100, submilisecond 0}};Default Value Type#{ field-data '00000000'H };Parameter Value
+11;op11 current orientation angle;5;1;16;ram memory;Time Interval;Default Sampling Interval#{ t-field {day 0, milisecond 100, submilisecond 0}};Default Value Type#{ field-data '00000000'H };Parameter Value
+12;op12 target orientation angle;5;1;20;ram memory;Time Interval;Default Sampling Interval#{ t-field {day 0, milisecond 100, submilisecond 0}};Default Value Type#{ field-data 'd1cb1640'H };Parameter Value
+21;op21 parachute status;3;14;24;ram memory;Time Interval;Default Sampling Interval#{ t-field {day 0, milisecond 100, submilisecond 0}};Default Value Type#{ field-data '00000000'H };Parameter Value
+31;op31 thruster 1 power;5;1;28;ram memory;Time Interval;Default Sampling Interval#{ t-field {day 0, milisecond 100, submilisecond 0}};Default Value Type#{ field-data '00000000'H };Parameter Value
+32;op32 thruster 2 power;5;1;32;ram memory;Time Interval;Default Sampling Interval#{ t-field {day 0, milisecond 100, submilisecond 0}};Default Value Type#{ field-data '00000000'H };Parameter Value
+33;op33 fuel left;5;1;36;ram memory;Time Interval;Default Sampling Interval#{ t-field {day 0, milisecond 100, submilisecond 0}};Default Value Type#{ field-data '00504347'H };Parameter Value
+41;op41 external temperature;5;1;40;ram memory;Time Interval;Default Sampling Interval#{ t-field {day 0, milisecond 100, submilisecond 0}};Default Value Type#{ field-data '00000000'H };Parameter Value
+51;op51 mission phase;3;14;44;ram memory;Time Interval;Default Sampling Interval#{ t-field {day 0, milisecond 100, submilisecond 0}};Default Value Type#{ field-data '00000000'H };Parameter Value
