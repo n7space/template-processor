@@ -12,7 +12,7 @@ PYTHON ?= python3
 all: check-format check
 
 install:
-	pipx install .
+	pipx install --force .
 
 check:
 	$(MAKE) -C tests check
