@@ -30,7 +30,7 @@ setup(
     include_package_data=True,
     python_requires='>=3.8',
     install_requires=[
-        # Add project dependencies here
+        "mako==1.3.10"
     ],
     extras_require={
         'dev': [

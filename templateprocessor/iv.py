@@ -200,10 +200,10 @@ class InterfaceView:
     and other elements that define a TASTE system's interface architecture.
     """
 
-    version: str
-    asn1file: str
-    uiFile: str
-    modifierHash: str
+    version: str = ""
+    asn1file: str = ""
+    uiFile: str = ""
+    modifierHash: str = ""
     functions: List[Function] = field(default_factory=list)
     connections: List[Connection] = field(default_factory=list)
     comments: List[Comment] = field(default_factory=list)

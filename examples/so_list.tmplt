@@ -1,0 +1,8 @@
+### List of all System Objects
+% for name, so_type in system_object_types.items():
+[${name}]
+Properties: ${', '.join(so_type.property_names)}
+% for idx, instance in enumerate(so_type.instances):
+Instance ${idx}: ${', '.join(instance.values.values())}
+% endfor
+% endfor
