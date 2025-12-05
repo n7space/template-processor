@@ -8,7 +8,7 @@ and construct SystemObjectType instances.
 import csv
 from io import TextIOWrapper
 from pathlib import Path
-from typing import TextIO, Union
+from typing import Union
 
 from templateprocessor.so import SystemObject, SystemObjectType
 from io import StringIO
@@ -73,7 +73,9 @@ class SOReader:
         csvfile = StringIO(csv_content)
         return self._parse_csv(csvfile, delimiter)
 
-    def _parse_csv(self, csvfile: TextIOWrapper, delimiter: str) -> SystemObjectType:
+    def _parse_csv(
+        self, csvfile: Union[TextIOWrapper, StringIO], delimiter: str
+    ) -> SystemObjectType:
         """
         Parse CSV content and construct SystemObjectType.
 
