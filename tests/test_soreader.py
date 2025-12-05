@@ -17,7 +17,7 @@ class TestSOReader:
         """Get the path to a test data file."""
         return Path(__file__).parent.parent / "data" / filename
 
-    def test_read_events_csv(self):
+    def test_read_simple_values_from_csv(self):
         """Test reading the events.csv file. Basic file."""
         # Prepare
         reader = SOReader()
@@ -56,7 +56,7 @@ class TestSOReader:
         assert last_instance.values["Auxilary data"] == "Empty"
         assert last_instance.values["Severity"] == "informative"
 
-    def test_read_parameters_csv(self):
+    def test_read_complex_values_from_csv(self):
         """Test reading the parameters.csv file. Contains complex values."""
         # Prepare
         reader = SOReader()
@@ -108,7 +108,7 @@ class TestSOReader:
         )
         assert param.values["Default Value Type"] == "Parameter Value"
 
-    def test_read_housekeeping_csv(self):
+    def test_read_multiline_values_from_csv(self):
         """Test reading the housekeeping.csv file. Contains multiline values."""
         # Prepare
         reader = SOReader()
