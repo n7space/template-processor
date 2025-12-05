@@ -5,7 +5,7 @@ Tests for TemplateInstantiator class
 import pytest
 import tempfile
 from pathlib import Path
-from typing import List
+from typing import Dict, List
 from templateprocessor.templateinstantiator import TemplateInstantiator
 from templateprocessor.iv import (
     InterfaceView,
@@ -65,7 +65,7 @@ class TestTemplateInstantiator:
         return iv
 
     @staticmethod
-    def create_sample_system_object_types() -> List[SystemObjectType]:
+    def create_sample_system_object_types() -> Dict[str, SystemObjectType]:
         """Create sample SystemObjectTypes for testing."""
         # Create events system object type
         events = SystemObjectType()
@@ -89,7 +89,11 @@ class TestTemplateInstantiator:
 
         params.instances = [param1, param2]
 
-        return [events, params]
+        sots = dict()
+        sots["events"] = events
+        sots["params"] = params
+
+        return sots
 
     def test_instantiator_initialization(self):
         """Test TemplateInstantiator initialization."""
@@ -160,17 +164,17 @@ Required Interfaces: ${len(func.required_interfaces)}
         instantiator = TemplateInstantiator(iv, so_types)
 
         template = """Number of System Object Types: ${len(system_object_types)}
-% for so_type in system_object_types:
-  Properties: ${', '.join(so_type.property_names)}
-  Instances: ${len(so_type.instances)}
+% for name, so_type in system_object_types.items():
+  [${name}] Properties: ${', '.join(so_type.property_names)}
+  [${name}] Instances: ${len(so_type.instances)}
 % endfor"""
 
         with tempfile.TemporaryDirectory() as tmpdir:
             result = instantiator.instantiate(template, tmpdir)
 
         assert "Number of System Object Types: 2" in result
-        assert "Properties: ID, Name, Severity" in result
-        assert "Properties: ID, Name, Default" in result
+        assert "[events] Properties: ID, Name, Severity" in result
+        assert "[params] Properties: ID, Name, Default" in result
         assert "Instances: 2" in result
 
     def test_instantiate_template_with_system_object_instances(self):
@@ -179,27 +183,33 @@ Required Interfaces: ${len(func.required_interfaces)}
         so_types = self.create_sample_system_object_types()
         instantiator = TemplateInstantiator(iv, so_types)
 
-        template = """% for so_type in system_object_types:
+        template = """% for name, so_type in system_object_types.items():
+[${name}]
 % for instance in so_type.instances:
 % if 'Name' in instance.values:
-  - ID: ${instance.values['ID']} - ${instance.values['Name']}} 
+ - ID: ${instance.values['ID']} - ${instance.values['Name']}
 % endif
 % endfor
 % endfor"""
 
         with tempfile.TemporaryDirectory() as tmpdir:
             result = instantiator.instantiate(template, tmpdir)
-
-        assert " ID: 1 - Error Event" in result
-        assert " ID: 2 - Info Event" in result
-        assert " ID: 1 - Timeout" in result
-        assert " ID: 2 - MaxRetries" in result
+        assert (
+            """[events]
+ - ID: 1 - Error Event
+ - ID: 2 - Info Event
+[params]
+ - ID: 1 - Timeout
+ - ID: 2 - MaxRetries
+"""
+            == result
+        )
 
     def test_instantiate_template_with_empty_data(self):
         """Test instantiating a template with empty Interface View and no System Objects."""
         iv = InterfaceView(version="1.0", asn1file="", uiFile="", modifierHash="")
 
-        so_types = []
+        so_types = {}
 
         instantiator = TemplateInstantiator(iv, so_types)
 
@@ -222,7 +232,7 @@ System Object Types: ${len(system_object_types)}"""
 
         template = """<%
 total_interfaces = sum(len(f.provided_interfaces) + len(f.required_interfaces) for f in interface_view.functions)
-total_instances = sum(len(so.instances) for so in system_object_types)
+total_instances = sum(len(so.instances) for so in system_object_types.values())
 %>
 Total Interfaces: ${total_interfaces}
 Total System Object Instances: ${total_instances}"""
