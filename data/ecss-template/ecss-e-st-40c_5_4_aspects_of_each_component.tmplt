@@ -1,1 +1,61 @@
-TODO detailed description of each component
+<%
+## Data Initialization
+# Get all functions
+
+funcs = []
+def get_function_children(func):
+    result = []
+    if func.nested_functions:
+        for nested in func.nested_functions:
+            result.append(nested)
+            result.extend(get_function_children(nested))
+    return result
+
+for func in interface_view.functions:
+    funcs.append(func)
+    funcs.extend(get_function_children(func))
+
+funcs.sort(key=lambda f: f.name.lower())
+
+%>
+
+The below chapters summarize aspects of each component.
+
+% for func in funcs:
+
+${"#"} ${func.name}
+
+Component Identifier: ${func.name}
+
+Type: TASTE Function
+
+Purpose: N/A
+
+Subordinates: ${",".join([child.name for child in func.nested_functions])}
+
+Dependencies: N/A
+
+Required Interfaces:
+
+% for ri in func.required_interfaces:
+
+- [${str(ri.kind.value).lower()}] ${ri.name}
+% endfor
+
+Provided Interfaces:
+% for pi in func.provided_interfaces:
+
+- [${str(pi.kind.value).lower()}] ${pi.name}
+% endfor
+
+Resources: N/A
+
+References: N/A
+
+Data: N/A
+
+Backward Requirement Trace: ${", ".join(func.requirement_ids) }
+
+Forward Requirement Trace: Described in Chapter 6
+
+% endfor
