@@ -1,0 +1,69 @@
+<%
+# Build requirement ID to component mapping
+req_to_comp = {}
+for func in interface_view.functions:
+    # Add function-level requirements
+    for req_id in func.requirement_ids:
+        if req_id not in req_to_comp:
+            req_to_comp[req_id] = []
+        req_to_comp[req_id].append((func.name, None))
+    
+    # Add provided interface requirements
+    for pi in func.provided_interfaces:
+        for req_id in pi.requirement_ids:
+            if req_id not in req_to_comp:
+                req_to_comp[req_id] = []
+            req_to_comp[req_id].append((func.name, f"{pi.name} (PI)"))
+    
+    # Add required interface requirements
+    for ri in func.required_interfaces:
+        for req_id in ri.requirement_ids:
+            if req_id not in req_to_comp:
+                req_to_comp[req_id] = []
+            req_to_comp[req_id].append((func.name, f"{ri.name} (RI)"))
+
+# Sort by requirement ID
+sorted_req_ids = sorted(req_to_comp.keys())
+%>
+
+## Forward trace ##
+
+### Requirement to Component Traces
+
+| Requirement ID | Component | Interface |
+|----------------|----------------------|-----------|
+% for req_id in sorted_req_ids:
+<%
+if not req_id:
+    continue
+%> \
+% for comp_name, iface_name in req_to_comp[req_id]: 
+<% 
+iface_display = iface_name if iface_name else "-"
+%> \
+| ${req_id or "-"} | ${comp_name} | ${iface_display} |
+% endfor
+% endfor
+
+## Backward trace ##
+
+### Component to Requirement Traces
+
+| Component | Interface | Requirement IDs |
+|----------------------|-----------|-----------------|
+% for func in interface_view.functions:
+<%
+    # Collect function-level requirements
+    func_reqs = ', '.join(sorted(func.requirement_ids)) if func.requirement_ids else "-"
+%>| ${func.name} | - | ${func_reqs} |
+% for pi in func.provided_interfaces:
+<%
+    pi_reqs = ', '.join(sorted(pi.requirement_ids)) if pi.requirement_ids else "-"
+%>| ${func.name} | ${pi.name} (PI) | ${pi_reqs} |
+% endfor
+% for ri in func.required_interfaces:
+<%
+    ri_reqs = ', '.join(sorted(ri.requirement_ids)) if ri.requirement_ids else "-"
+%>| ${func.name} | ${ri.name} (RI) | ${ri_reqs} |
+% endfor
+% endfor

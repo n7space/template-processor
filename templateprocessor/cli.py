@@ -100,30 +100,32 @@ def main():
     logging.info(f"Reading Interface View from {args.iv}")
     iv = IVReader().read(args.iv) if args.iv else InterfaceView()
     sots = {}
-    so_reader = SOReader()
-    for sot_file in args.sos:
-        logging.info(f"Reading System Objects from {sot_file}")
-        name = Path(sot_file).stem
-        logging.debug(f"-SOT name: {name}")
-        sos = so_reader.read(sot_file)
-        sots[name] = sos
+    if args.sos:
+        so_reader = SOReader()
+        for sot_file in args.sos:
+            logging.info(f"Reading System Objects from {sot_file}")
+            name = Path(sot_file).stem
+            logging.debug(f"-SOT name: {name}")
+            sos = so_reader.read(sot_file)
+            sots[name] = sos
 
     instantiator = TemplateInstantiator(iv, sots)
 
-    for template_file in args.template:
-        logging.info(f"Processing template {template_file}")
-        name = Path(template_file).stem
-        logging.debug(f"Base name: {name}")
-        logging.debug(f"Reading template {template_file}")
-        with open(template_file, "r") as f:
-            template = f.read()
-        logging.debug(f"Instantiating template:\n {template}")
-        instantiated_template = instantiator.instantiate(template, "")
-        logging.debug(f"Instantiation:\n {instantiated_template}")
-        output = Path(args.output) / f"{name}.md"
-        logging.debug(f"Saving to {output}")
-        with open(output, "w") as f:
-            f.write(instantiated_template)
+    if args.template:
+        for template_file in args.template:
+            logging.info(f"Processing template {template_file}")
+            name = Path(template_file).stem
+            logging.debug(f"Base name: {name}")
+            logging.debug(f"Reading template {template_file}")
+            with open(template_file, "r") as f:
+                template = f.read()
+            logging.debug(f"Instantiating template:\n {template}")
+            instantiated_template = instantiator.instantiate(template, "")
+            logging.debug(f"Instantiation:\n {instantiated_template}")
+            output = Path(args.output) / f"{name}.md"
+            logging.debug(f"Saving to {output}")
+            with open(output, "w") as f:
+                f.write(instantiated_template)
 
     return 0
 
