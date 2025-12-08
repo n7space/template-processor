@@ -92,6 +92,7 @@ class FunctionInterface:
     input_parameters: List[InputParameter] = field(default_factory=list)
     output_parameters: List[OutputParameter] = field(default_factory=list)
     properties: List[Property] = field(default_factory=list)
+    requirement_ids: List[str] = field(default_factory=list)
 
 
 @dataclass
@@ -138,6 +139,7 @@ class Function:
     properties: List[Property] = field(default_factory=list)
     nested_functions: List["Function"] = field(default_factory=list)
     nested_connections: List["Connection"] = field(default_factory=list)
+    requirement_ids: List[str] = field(default_factory=list)
 
 
 @dataclass

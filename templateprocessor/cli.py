@@ -25,7 +25,10 @@ def parse_arguments() -> argparse.Namespace:
     )
 
     parser.add_argument(
-        "-i", "--iv", help="Input Interface View", metavar="FILE",
+        "-i",
+        "--iv",
+        help="Input Interface View",
+        metavar="FILE",
     )
 
     parser.add_argument(

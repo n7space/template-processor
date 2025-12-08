@@ -249,3 +249,33 @@ class TestIVReader:
         assert len(iv.functions) == 1
         assert iv.functions[0].name == "test_func"
         assert len(iv.layers) == 1
+
+    def test_read_requirements(self):
+        """Test parsing interface with requirement IDs."""
+        # Prepare
+        reader = IVReader()
+        iv_file = self.get_test_data_file("requirements.iv.xml")
+        assert iv_file.exists()
+
+        # Read
+        iv = reader.read(iv_file)
+
+        # Find Function_1 function
+        function1 = next((f for f in iv.functions if f.name == "Function_1"), None)
+        assert function1 is not None
+
+        assert len(function1.requirement_ids) == 2
+        assert "r1" in function1.requirement_ids
+        assert "r2" in function1.requirement_ids
+
+        # Find Function_2 function
+        function2 = next((f for f in iv.functions if f.name == "Function_2"), None)
+        assert function2 is not None
+
+        # Find do_smth interface
+        do_smth = next(
+            (pi for pi in function2.provided_interfaces if pi.name == "do_smth"), None
+        )
+        assert do_smth is not None
+        assert len(do_smth.requirement_ids) == 1
+        assert "r5" in do_smth.requirement_ids
