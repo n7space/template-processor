@@ -26,9 +26,9 @@ for func in interface_view.functions:
 sorted_req_ids = sorted(req_to_comp.keys())
 %>
 
-## Forward trace ##
+${'##'} Forward trace ${'##'}
 
-### Requirement to Component Traces
+${'###'} Requirement to Component Traces
 
 | Requirement ID | Component | Interface |
 |----------------|----------------------|-----------|
@@ -45,9 +45,9 @@ iface_display = iface_name if iface_name else "-"
 % endfor
 % endfor
 
-## Backward trace ##
+${'##'} Backward trace ${'##'}
 
-### Component to Requirement Traces
+${'###'} Component to Requirement Traces
 
 | Component | Interface | Requirement IDs |
 |----------------------|-----------|-----------------|
