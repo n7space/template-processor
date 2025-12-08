@@ -2,7 +2,8 @@ SRC_DIR = ../../
 PYTHON ?= python3
 
 TESTS = \
-	test_ivreader.py
+	test_ivreader.py \
+	test_soreader.py
 
 .PHONY: \
 	check

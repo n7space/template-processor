@@ -1,0 +1,17 @@
+ID;Name;Collection Interval;Simply Commuted Parameters;Super Commuted Parameter Sets;Periodic Generation Action Status;Simply Commuted Parameters Value;Super Commuted Parameter Sets Value;Periodic Generation Action Status Value
+1;hk01 status;10;Parameter IDs;Super Commuted Parameter Sets System Object Value;Periodic Generation Action Status;"Simply Commuted Parameters#{ field-data { 
+op51-mission-phase,
+op21-parachute-status,
+op31-thruster-1-power, 
+op32-thruster-2-power, 
+op33-fuel-left
+} }";Super Commuted Parameter Sets#{ field-data {  } };Periodic Generation Action Status#enabled
+2;hk02 parameters;5;Parameter IDs;Super Commuted Parameter Sets System Object Value;Periodic Generation Action Status;"Simply Commuted Parameters#{ field-data { 
+op01-current-velocity-horizontal, 
+op02-current-velocity-vertical, 
+op03-target-velocity-horizontal, 
+op04-target-velocity-vertical, 
+op11-current-orientation-angle, 
+op12-target-orientation-angle, 
+op41-external-temperature 
+} }";Super Commuted Parameter Sets#{ field-data {  } };Periodic Generation Action Status#enabled

@@ -1,0 +1,13 @@
+ID;Name;Auxilary data;Severity
+0;e00 null event;Empty;informative
+1;e01 entered orbital descent phase;Empty;informative
+2;e02 finished orbital descent phase;Empty;informative
+3;e03 parachute deployment velocity reached;Empty;informative
+4;e04 parachute deployed;Empty;informative
+5;e05 parachute jettison altitude reached;Empty;informative
+6;e06 parachute jettisoned;Empty;informative
+7;e07 entered powered landing phase;Empty;informative
+8;e08 finished powered landing phase;Empty;informative
+11;e11 fuel empty;Empty;high-severity
+21;e21 deploy parachute;Empty;informative
+22;e22 jettison parachute;Empty;informative
