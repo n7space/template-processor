@@ -5,6 +5,7 @@ This module is responsible for instantiating Mako templates using the provided d
 """
 
 from templateprocessor.iv import InterfaceView
+from templateprocessor.dv import DeploymentView
 from templateprocessor.so import SystemObjectType, SystemObject
 from typing import List, Dict
 from mako.template import Template
@@ -17,14 +18,17 @@ class TemplateInstantiator:
 
     system_object_types: Dict[str, SystemObjectType] = dict()
     interface_view: InterfaceView
+    deployment_view: DeploymentView
 
     def __init__(
         self,
         interface_view: InterfaceView,
+        deployment_view: DeploymentView,
         system_object_types: Dict[str, SystemObjectType],
     ):
         self.system_object_types = system_object_types
         self.interface_view = interface_view
+        self.deployment_view = deployment_view
 
     def instantiate(self, template: str, context_directory: str) -> str:
         mako_template = Template(text=template, module_directory=context_directory)
@@ -32,6 +36,7 @@ class TemplateInstantiator:
         context = {
             "system_object_types": self.system_object_types,
             "interface_view": self.interface_view,
+            "deployment_view": self.deployment_view,
         }
 
         instantiated_text = str(mako_template.render(**context))

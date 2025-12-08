@@ -9,9 +9,11 @@ from pathlib import Path
 import sys
 from templateprocessor import __version__
 from templateprocessor.iv import InterfaceView
+from templateprocessor.dv import DeploymentView
 from templateprocessor.templateinstantiator import TemplateInstantiator
 from templateprocessor.ivreader import IVReader
 from templateprocessor.soreader import SOReader
+from templateprocessor.dvreader import DVReader
 
 
 def parse_arguments() -> argparse.Namespace:
@@ -28,6 +30,13 @@ def parse_arguments() -> argparse.Namespace:
         "-i",
         "--iv",
         help="Input Interface View",
+        metavar="FILE",
+    )
+
+    parser.add_argument(
+        "-d",
+        "--dv",
+        help="Input Deployment View",
         metavar="FILE",
     )
 
@@ -93,12 +102,15 @@ def main():
 
     logging.info("Template Processor")
     logging.debug(f"Interface View: {args.iv}")
+    logging.debug(f"Deployment View: {args.dv}")
     logging.debug(f"System Objects: {args.sos}")
     logging.debug(f"Templates: {args.template}")
     logging.debug(f"Output Directory: {args.output}")
 
     logging.info(f"Reading Interface View from {args.iv}")
     iv = IVReader().read(args.iv) if args.iv else InterfaceView()
+    logging.info(f"Reading Deployment View from {args.dv}")
+    dv = DVReader().read(args.dv) if args.dv else DeploymentView()
     sots = {}
     if args.sos:
         so_reader = SOReader()
@@ -109,7 +121,7 @@ def main():
             sos = so_reader.read(sot_file)
             sots[name] = sos
 
-    instantiator = TemplateInstantiator(iv, sots)
+    instantiator = TemplateInstantiator(iv, dv, sots)
 
     if args.template:
         for template_file in args.template:
