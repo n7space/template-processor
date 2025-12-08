@@ -7,12 +7,6 @@ from pathlib import Path
 from templateprocessor.dvreader import DVReader
 from templateprocessor.dv import (
     DeploymentView,
-    Node,
-    Partition,
-    DeploymentFunction,
-    Device,
-    Connection,
-    Message,
 )
 
 
