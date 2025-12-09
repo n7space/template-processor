@@ -118,6 +118,7 @@ class IVReader:
         function = Function(
             id=elem.get("id", ""),
             name=elem.get("name", ""),
+            comment=elem.get("Comment", ""),
             is_type=elem.get("is_type", "NO") == "YES",
             language=(
                 Language(elem.get("language", "")) if elem.get("language") else None

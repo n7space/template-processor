@@ -125,6 +125,7 @@ class Function:
 
     id: str
     name: str
+    comment: str
     is_type: bool
     language: Optional[Language] = None
     default_implementation: str = "default"

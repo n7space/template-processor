@@ -16,7 +16,7 @@ for func in interface_view.functions:
     funcs.extend(get_function_children(func))
 
 # Get functions deployed to the target partition
-target_partition_name = "ASW"
+target_partition_name = values["TARGET"]
 
 deployed_funcs = []
 target_partition = None
@@ -29,7 +29,6 @@ deployed_func_names = [f.name for f in target_partition.functions]
 for fun in funcs:
     if fun.name in deployed_func_names:
         deployed_funcs.append(fun)
-
 
 # Get all requirements
 req_map = {}

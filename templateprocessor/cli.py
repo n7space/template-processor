@@ -49,6 +49,13 @@ def parse_arguments() -> argparse.Namespace:
     )
 
     parser.add_argument(
+        "-v",
+        "--value",
+        help="Input values (formatted as name=value pair, e.g., target=ASW)",
+        action="append",
+    )
+
+    parser.add_argument(
         "-t",
         "--template",
         help="Template file to process (each as a separate argument)",
@@ -93,6 +100,25 @@ def get_log_level(level_str: str) -> int:
     return log_levels.get(level_str.lower(), logging.WARNING)
 
 
+def get_values_dictionary(values: list[str]) -> dict[str, str]:
+    if not values or not isinstance(values, list):
+        return {}
+    result = {}
+    for pair in values:
+        if pair.count("=") != 1:
+            raise Exception(
+                f"Pair [{pair}] contains incorrect number of name/value separators (=)"
+            )
+        split = pair.split("=")
+        name = split[0].strip()
+        value = split[1].strip()
+        if len(name) == 0:
+            raise Exception(f"Name in [{pair}] is empty")
+        # value can be empty
+        result[name] = value
+    return result
+
+
 def main():
     """Main entry point for the Template Processor CLI."""
 
@@ -104,6 +130,7 @@ def main():
     logging.debug(f"Interface View: {args.iv}")
     logging.debug(f"Deployment View: {args.dv}")
     logging.debug(f"System Objects: {args.sos}")
+    logging.debug(f"Values: {args.value}")
     logging.debug(f"Templates: {args.template}")
     logging.debug(f"Output Directory: {args.output}")
 
@@ -120,8 +147,11 @@ def main():
             logging.debug(f"-SOT name: {name}")
             sos = so_reader.read(sot_file)
             sots[name] = sos
+    logging.info(f"Parsing values from {args.value}")
+    values = get_values_dictionary(args.value)
 
-    instantiator = TemplateInstantiator(iv, dv, sots)
+    logging.info(f"Instantiating the TemplateInstantiator")
+    instantiator = TemplateInstantiator(iv, dv, sots, values)
 
     if args.template:
         for template_file in args.template:
