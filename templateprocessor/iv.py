@@ -37,6 +37,8 @@ class Language(str, Enum):
     CPP = "C++"
     SIMULINK = "Simulink"
     QGenc = "QGenc"
+    GUI = "GUI"
+    BLACKBOX_C = "Blackbox_C"
 
 
 @dataclass
