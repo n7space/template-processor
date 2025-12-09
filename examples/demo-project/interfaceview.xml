@@ -1,0 +1,574 @@
+<InterfaceView version="1.3" asn1file="demo-project.acn" UiFile="interfaceview.ui.xml" modifierHash="383508e" requirementsURL="https://gitlab.com/n7space/demo-project-requirements" reviewsURL="https://gitlab.com/n7space/demo-project-requirements">
+<Function id="{5b2b28b1-566c-45a2-95c4-81c8b9c53882}" name="CnC" is_type="NO" language="GUI" default_implementation="default" fixed_system_element="NO" required_system_element="NO" startup_priority="1" instances_min="1" instances_max="1">
+    <Property name="TASTE_IV_Properties::Default_Codegen" value="Ada"/>
+<Provided_Interface id="{9eaa1896-1480-4004-9504-20a4f283ab6e}" name="response" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="Response" encoding="NATIVE"/>
+</Provided_Interface>
+
+<Required_Interface id="{865b64a2-64a8-490c-9979-7976225c9bc8}" name="request" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="Request" encoding="NATIVE"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="false"/>
+</Required_Interface>
+
+    <Implementations>
+        <Implementation name="default" language="GUI"/>
+    </Implementations>
+</Function>
+
+<Function id="{22dd1137-c442-4169-9889-f8aa23498e44}" Comment="Actuates actuators" name="Actuation" is_type="NO" language="Ada" default_implementation="default" fixed_system_element="NO" required_system_element="NO" requirement_ids="dp-fun-50" startup_priority="1" instances_min="1" instances_max="1">
+    <Property name="TASTE_IV_Properties::Default_Codegen" value="Ada"/>
+<Provided_Interface id="{d8c64dbd-d585-4c85-803c-6ec3e97046e9}" name="actuate" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="Cmd" encoding="NATIVE"/>
+</Provided_Interface>
+
+<Required_Interface id="{375bce03-def1-4662-8ec3-59a6d0093c53}" name="submit" kind="Protected" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" wcet="0">
+    <Input_Parameter name="p1" type="ParameterValue" encoding="NATIVE"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+    <Implementations>
+        <Implementation name="default" language="Ada"/>
+    </Implementations>
+</Function>
+
+<Function id="{21c6cdd2-9450-4ebe-bebd-9a7d2f55045a}" Comment="Stores on-board parameters" name="DataPool" is_type="NO" language="SDL" default_implementation="default" fixed_system_element="NO" required_system_element="NO" requirement_ids="dp-dat-10,dp-des-20" startup_priority="1" instances_min="1" instances_max="1">
+    <Property name="TASTE_IV_Properties::Default_Codegen" value="Ada"/>
+<Provided_Interface id="{a699aba9-2ba1-4c83-baaf-bf8070c834c7}" name="submit" kind="Protected" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" wcet="0">
+    <Input_Parameter name="p1" type="ParameterValue" encoding="NATIVE"/>
+</Provided_Interface>
+
+<Provided_Interface id="{f97f6edd-8926-436f-b8ff-7de6f00795be}" name="retrieve" kind="Protected" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" wcet="0">
+    <Output_Parameter name="p1" type="ParameterValue" encoding="NATIVE"/>
+</Provided_Interface>
+
+    <Implementations>
+        <Implementation name="default" language="SDL"/>
+    </Implementations>
+</Function>
+
+<Function id="{e4372e37-10f5-4988-8140-d3445cb68a2b}" name="CANOpenSlave" is_type="NO" language="SDL" default_implementation="default" fixed_system_element="NO" required_system_element="NO" startup_priority="1" instances_min="1" instances_max="1">
+    <Property name="TASTE_IV_Properties::Default_Codegen" value="Ada"/>
+<Provided_Interface id="{2ac6b5e2-3a80-4ebf-9f5a-1e752a2c3943}" name="pdu_out" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="RawData" encoding="ACN"/>
+</Provided_Interface>
+
+<Required_Interface id="{70a44ed1-5a04-4cf4-a89c-01aee3a5b462}" name="pdu_in" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="RawData" encoding="ACN"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+    <Implementations>
+        <Implementation name="default" language="SDL"/>
+    </Implementations>
+</Function>
+
+<Function id="{f4a308ae-34a0-45a6-83df-122c8b4539c0}" Comment="Handles the command and control functions" name="Service_Frontend" is_type="NO" language="SDL" default_implementation="default" fixed_system_element="NO" required_system_element="NO" requirement_ids="dp-des-10,dp-fun-10,dp-fun-20" startup_priority="1" instances_min="1" instances_max="1">
+    <Property name="TASTE_IV_Properties::Default_Codegen" value="Ada"/>
+<Provided_Interface id="{6d05d0b7-7072-4624-b40d-516772551fe2}" name="request" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="Request" encoding="NATIVE"/>
+</Provided_Interface>
+
+<Provided_Interface id="{cc465677-ac0d-40f7-9ce7-309b52dc79ab}" name="tick" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+</Provided_Interface>
+
+<Required_Interface id="{5a6bd997-24dd-4dfb-9408-b73efad61025}" name="response" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="Response" encoding="NATIVE"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+<Required_Interface id="{85a186a5-875c-4b3f-b500-8b8ec0d05b64}" name="retrieve" kind="Protected" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" wcet="0">
+    <Output_Parameter name="p1" type="ParameterValue" encoding="NATIVE"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+<Required_Interface id="{1306cb03-8d26-43a1-ab47-455e3176e6de}" name="actuate" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="Cmd" encoding="NATIVE"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+<Required_Interface id="{18cdc41f-db84-46b3-b802-89a90427160a}" name="command" kind="Protected" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" wcet="0">
+    <Input_Parameter name="p1" type="Cmd" encoding="NATIVE"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+<Function id="{92088f77-1325-475d-a87e-bb434515f2f5}" Comment="Router of Service Requests" name="Router" is_type="NO" language="SDL" default_implementation="default" fixed_system_element="NO" required_system_element="NO" requirement_ids="dp-des-10" startup_priority="1" instances_min="1" instances_max="1">
+    <Property name="TASTE_IV_Properties::Default_Codegen" value="Ada"/>
+<Provided_Interface id="{c659a656-c7a2-4654-95ee-1fa5a32224f8}" name="request" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="Request" encoding="NATIVE"/>
+</Provided_Interface>
+
+<Required_Interface id="{e665ade2-5e2f-452e-8263-d522d1ac003e}" name="service_a_request" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="Request" encoding="NATIVE"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+<Required_Interface id="{9bbcc215-bf8a-4ede-bafc-015e7daca88b}" name="service_b_request" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="Request" encoding="NATIVE"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+    <Implementations>
+        <Implementation name="default" language="SDL"/>
+    </Implementations>
+</Function>
+
+<Function id="{f53da581-e5aa-432a-abee-c294e277cf7a}" Comment="Services CAN interface commands" name="Service_A" is_type="NO" language="SDL" default_implementation="default" fixed_system_element="NO" required_system_element="NO" requirement_ids="dp-fun-10" startup_priority="1" instances_min="1" instances_max="1">
+    <Property name="TASTE_IV_Properties::Default_Codegen" value="Ada"/>
+<Provided_Interface id="{4d8a8987-c894-411e-82d2-47aa466cee5c}" name="service_a_request" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="Request" encoding="NATIVE"/>
+</Provided_Interface>
+
+<Required_Interface id="{b1186962-b312-4b4f-b23a-d69f6c305d02}" name="retrieve" kind="Protected" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false">
+    <Output_Parameter name="p1" type="ParameterValue" encoding="NATIVE"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="false"/>
+</Required_Interface>
+
+<Required_Interface id="{eaed407c-2b15-4f1d-a579-ee29c3108d28}" name="response" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false">
+    <Input_Parameter name="p1" type="Response" encoding="NATIVE"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="false"/>
+</Required_Interface>
+
+<Required_Interface id="{ea607104-c20f-4d90-a25f-451784e72bb1}" name="command" kind="Protected" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false">
+    <Input_Parameter name="p1" type="Cmd" encoding="NATIVE"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="false"/>
+</Required_Interface>
+
+    <Implementations>
+        <Implementation name="default" language="SDL"/>
+    </Implementations>
+</Function>
+
+<Function id="{dc50901a-61b8-48a5-9b56-cb696093e641}" Comment="Services On-Board Data" name="Service_B" is_type="NO" language="SDL" default_implementation="default" fixed_system_element="NO" required_system_element="NO" requirement_ids="dp-fun-20" startup_priority="1" instances_min="1" instances_max="1">
+    <Property name="TASTE_IV_Properties::Default_Codegen" value="Ada"/>
+<Provided_Interface id="{8286eb57-6fa5-4727-b31f-aba247f62dd8}" name="tick" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+</Provided_Interface>
+
+<Provided_Interface id="{75775243-5268-42ff-996f-10db5e41eb06}" name="service_b_request" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="Request" encoding="NATIVE"/>
+</Provided_Interface>
+
+<Required_Interface id="{709a3794-e82c-458a-b966-4bc2c49ed035}" name="actuate" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false">
+    <Input_Parameter name="p1" type="Cmd" encoding="NATIVE"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="false"/>
+</Required_Interface>
+
+<Required_Interface id="{e7c85212-ddcb-4a8b-a9dc-fa3207293a46}" name="retrieve" kind="Protected" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false">
+    <Output_Parameter name="p1" type="ParameterValue" encoding="NATIVE"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="false"/>
+</Required_Interface>
+
+<Required_Interface id="{0d401ca5-1d03-4b80-b387-4bfd37f13d29}" name="response" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false">
+    <Input_Parameter name="p1" type="Response" encoding="NATIVE"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="false"/>
+</Required_Interface>
+
+<Required_Interface id="{22bfc76d-6efc-414d-b2b4-7999f946960c}" name="command" kind="Protected" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false">
+    <Input_Parameter name="p1" type="Cmd" encoding="NATIVE"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="false"/>
+</Required_Interface>
+
+    <Implementations>
+        <Implementation name="default" language="SDL"/>
+    </Implementations>
+</Function>
+
+<Connection id="{f968af78-1544-4fc8-8f95-025984b8ea7c}" required_system_element="NO">
+    <Source iface_id="{cc465677-ac0d-40f7-9ce7-309b52dc79ab}" func_name="Service_Frontend" pi_name="tick" />
+    <Target iface_id="{8286eb57-6fa5-4727-b31f-aba247f62dd8}" func_name="Service_B" pi_name="tick" />
+</Connection>
+
+<Connection id="{cee8ce31-4c2a-4ee1-9bb5-92d119e203a0}" required_system_element="NO">
+    <Source iface_id="{709a3794-e82c-458a-b966-4bc2c49ed035}" func_name="Service_B" ri_name="actuate" />
+    <Target iface_id="{1306cb03-8d26-43a1-ab47-455e3176e6de}" func_name="Service_Frontend" ri_name="actuate" />
+</Connection>
+
+<Connection id="{e739dcf4-f148-4b84-93c7-7faf2888b613}" required_system_element="NO">
+    <Source iface_id="{e7c85212-ddcb-4a8b-a9dc-fa3207293a46}" func_name="Service_B" ri_name="retrieve" />
+    <Target iface_id="{85a186a5-875c-4b3f-b500-8b8ec0d05b64}" func_name="Service_Frontend" ri_name="retrieve" />
+</Connection>
+
+<Connection id="{ac7e7a9f-d933-483e-95e9-0eed9edbdae2}" required_system_element="NO">
+    <Source iface_id="{b1186962-b312-4b4f-b23a-d69f6c305d02}" func_name="Service_A" ri_name="retrieve" />
+    <Target iface_id="{85a186a5-875c-4b3f-b500-8b8ec0d05b64}" func_name="Service_Frontend" ri_name="retrieve" />
+</Connection>
+
+<Connection id="{9f0ba552-1e2d-4d73-b85d-4f4dfd5d5de6}" required_system_element="NO">
+    <Source iface_id="{6d05d0b7-7072-4624-b40d-516772551fe2}" func_name="Service_Frontend" pi_name="request" />
+    <Target iface_id="{c659a656-c7a2-4654-95ee-1fa5a32224f8}" func_name="Router" pi_name="request" />
+</Connection>
+
+<Connection id="{efb4e126-1b0e-4a8d-844e-d8b1b4a86388}" required_system_element="NO">
+    <Source iface_id="{0d401ca5-1d03-4b80-b387-4bfd37f13d29}" func_name="Service_B" ri_name="response" />
+    <Target iface_id="{5a6bd997-24dd-4dfb-9408-b73efad61025}" func_name="Service_Frontend" ri_name="response" />
+</Connection>
+
+<Connection id="{3257eb51-6870-423c-9156-9073148b2ff1}" required_system_element="NO">
+    <Source iface_id="{eaed407c-2b15-4f1d-a579-ee29c3108d28}" func_name="Service_A" ri_name="response" />
+    <Target iface_id="{5a6bd997-24dd-4dfb-9408-b73efad61025}" func_name="Service_Frontend" ri_name="response" />
+</Connection>
+
+<Connection id="{831686eb-6458-4878-8bea-bf28b1eb6bf7}" name="Router_service_a_request____Service_A_service_a_request" required_system_element="NO">
+    <Source iface_id="{e665ade2-5e2f-452e-8263-d522d1ac003e}" func_name="Router" ri_name="service_a_request" />
+    <Target iface_id="{4d8a8987-c894-411e-82d2-47aa466cee5c}" func_name="Service_A" pi_name="service_a_request" />
+</Connection>
+
+<Connection id="{bc8aae9b-44ae-4ea5-bdb4-b4b1eb0350c7}" name="Router_service_b_request____Service_B_service_b_request" required_system_element="NO">
+    <Source iface_id="{9bbcc215-bf8a-4ede-bafc-015e7daca88b}" func_name="Router" ri_name="service_b_request" />
+    <Target iface_id="{75775243-5268-42ff-996f-10db5e41eb06}" func_name="Service_B" pi_name="service_b_request" />
+</Connection>
+
+<Connection id="{fb685181-5c60-4b25-83fa-64d17fdfe48d}" required_system_element="NO">
+    <Source iface_id="{ea607104-c20f-4d90-a25f-451784e72bb1}" func_name="Service_A" ri_name="command" />
+    <Target iface_id="{18cdc41f-db84-46b3-b802-89a90427160a}" func_name="Service_Frontend" ri_name="command" />
+</Connection>
+
+<Connection id="{00d8f411-e1f0-4e08-8498-f1434b7f2324}" required_system_element="NO">
+    <Source iface_id="{22bfc76d-6efc-414d-b2b4-7999f946960c}" func_name="Service_B" ri_name="command" />
+    <Target iface_id="{18cdc41f-db84-46b3-b802-89a90427160a}" func_name="Service_Frontend" ri_name="command" />
+</Connection>
+
+    <Implementations>
+        <Implementation name="default" language="SDL"/>
+    </Implementations>
+</Function>
+
+<Function id="{7a8a0847-c06e-4eca-8b97-2380811c31ab}" name="EGSE_Transcoder" is_type="NO" language="Blackbox_C" default_implementation="default" fixed_system_element="NO" required_system_element="NO" startup_priority="1" instances_min="1" instances_max="1">
+    <Property name="TASTE_IV_Properties::Default_Codegen" value="Ada"/>
+<Provided_Interface id="{5c7170b8-72f7-4280-93d6-c7a8651dd0cc}" name="tm" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="TM" encoding="ACN"/>
+</Provided_Interface>
+
+<Provided_Interface id="{2d1f16d6-ee97-41d7-b880-94e020bc2de7}" name="request" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="Request" encoding="NATIVE"/>
+</Provided_Interface>
+
+<Required_Interface id="{d31597e3-053d-4dd8-808e-3e65317c8d86}" name="tc" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="TC" encoding="ACN"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+<Required_Interface id="{8931d303-94e5-4178-b83f-467dbd212c83}" name="tm" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="TM" encoding="ACN"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+<Required_Interface id="{7ad5b041-033d-46f1-822f-bade53b106dc}" name="response" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="Response" encoding="NATIVE"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+<Required_Interface id="{1c207dc1-5d02-4ce7-b737-3eb43997892d}" name="param" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="ParameterValue" encoding="NATIVE"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+    <Implementations>
+        <Implementation name="default" language="Blackbox_C"/>
+    </Implementations>
+</Function>
+
+<Function id="{386b158a-a083-41da-8d81-b2ff569d64f2}" Comment="Handles the reception of TCs and sending of TMs" name="TC_TM_Interface" is_type="NO" language="C" default_implementation="default" fixed_system_element="NO" required_system_element="NO" requirement_ids="dp-if-10,dp-if-20" startup_priority="1" instances_min="1" instances_max="1">
+    <Property name="TASTE_IV_Properties::Default_Codegen" value="Ada"/>
+<Provided_Interface id="{53b4399f-40d2-400a-934d-89b2d9e2896c}" name="uart_tc" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="RawData" encoding="ACN"/>
+</Provided_Interface>
+
+<Provided_Interface id="{6dbb6ee2-715e-4967-969e-0afe77cd9b71}" name="tm" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="TM" encoding="ACN"/>
+</Provided_Interface>
+
+<Provided_Interface id="{637fab93-c813-4a55-bf67-741a9787eb14}" name="response" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="Response" encoding="NATIVE"/>
+</Provided_Interface>
+
+<Required_Interface id="{66a72590-ab3b-47e7-8630-4e17eecf9d2f}" name="uart_tm" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="RawData" encoding="ACN"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+<Required_Interface id="{5f71eae4-8158-4f92-8e41-bc682c79606a}" name="tc" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="TC" encoding="ACN"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+<Required_Interface id="{01aa9e2f-fe8a-47e7-80b8-0117405a51d2}" name="request" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="Request" encoding="NATIVE"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+    <Implementations>
+        <Implementation name="default" language="C"/>
+    </Implementations>
+</Function>
+
+<Function id="{ed8a7364-04a5-4983-8ac1-e58403f6a041}" Comment="Manages the connected CANOpen network" name="CANOpenMaster" is_type="NO" language="C" default_implementation="default" fixed_system_element="NO" required_system_element="NO" requirement_ids="dp-dat-20,dp-fun-30,dp-if-40" startup_priority="1" instances_min="1" instances_max="1">
+    <Property name="TASTE_IV_Properties::Default_Codegen" value="Ada"/>
+<Provided_Interface id="{eb478793-37e3-4798-b90d-521b4de78d02}" name="pdu_in" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="RawData" encoding="ACN"/>
+</Provided_Interface>
+
+<Provided_Interface id="{18c032f4-39fb-4051-8e5c-668a1f21d94f}" name="command" kind="Protected" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" wcet="0">
+    <Input_Parameter name="p1" type="Cmd" encoding="NATIVE"/>
+</Provided_Interface>
+
+<Provided_Interface id="{ff516d61-e2c1-4ec3-8cb1-93529e2c8ae8}" name="tick" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+</Provided_Interface>
+
+<Required_Interface id="{183b4fed-2e01-4c3b-b1c2-b7cef58040de}" name="submit" kind="Protected" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" wcet="0">
+    <Input_Parameter name="p1" type="ParameterValue" encoding="NATIVE"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+<Required_Interface id="{076ca0fb-3663-4378-a85c-8b1dc96cb693}" name="pdu_out" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="RawData" encoding="ACN"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+    <Implementations>
+        <Implementation name="default" language="C"/>
+    </Implementations>
+</Function>
+
+<Function id="{d93bbc74-4768-4145-b307-331b149dc80a}" Comment="Provides a synchronized system-wide Tick to other modules" name="Syncer" is_type="NO" language="SDL" default_implementation="default" fixed_system_element="NO" required_system_element="NO" startup_priority="1" instances_min="1" instances_max="1">
+    <Property name="TASTE_IV_Properties::Default_Codegen" value="Ada"/>
+<Provided_Interface id="{6b86023b-de28-451f-96a1-8f0d92615857}" name="pps" kind="Cyclic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" dispatch_offset="0" stack_size="1024" wcet="0" period="1000" priority="1">
+</Provided_Interface>
+
+<Required_Interface id="{75d10afa-4f1e-478d-a9d9-609614468574}" name="tick" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+    <Implementations>
+        <Implementation name="default" language="SDL"/>
+    </Implementations>
+</Function>
+
+<Function id="{98fbadbc-3384-4ec1-8c68-d3ee594d28ee}" name="Parameter_Monitor" is_type="NO" language="GUI" default_implementation="default" fixed_system_element="NO" required_system_element="NO" startup_priority="1" instances_min="1" instances_max="1">
+    <Property name="TASTE_IV_Properties::Default_Codegen" value="Ada"/>
+<Provided_Interface id="{87c857b5-5e01-42b9-be41-14945b4095f9}" name="param" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="ParameterValue" encoding="NATIVE"/>
+</Provided_Interface>
+
+    <Implementations>
+        <Implementation name="default" language="GUI"/>
+    </Implementations>
+</Function>
+
+<Function id="{96c9e808-95df-4c8b-b5b6-349806fad470}" name="EGSE_IF" is_type="NO" language="C" default_implementation="default" fixed_system_element="NO" required_system_element="NO" startup_priority="1" instances_min="1" instances_max="1">
+    <Property name="TASTE_IV_Properties::Default_Codegen" value="Ada"/>
+<Provided_Interface id="{f892b3ec-f335-4331-8da8-4a0a19b63e20}" name="tc" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="TC" encoding="ACN"/>
+</Provided_Interface>
+
+<Provided_Interface id="{6cfa0662-fe26-43ef-b982-9300b0c8a870}" name="uart_tm" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="RawData" encoding="ACN"/>
+</Provided_Interface>
+
+<Required_Interface id="{78c4deed-b125-4c2b-8c80-f12c9692af44}" name="tm" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="TM" encoding="ACN"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+<Required_Interface id="{3cb1d68b-4869-42e8-8268-cc2c734fe323}" name="uart_tc" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="RawData" encoding="ACN"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+    <Implementations>
+        <Implementation name="default" language="C"/>
+    </Implementations>
+</Function>
+
+<Function id="{9b3559ac-7da4-4df7-9f17-22e974091bbf}" Comment="Acquires data from sensors" name="SensorArray" is_type="NO" language="C" default_implementation="default" fixed_system_element="NO" required_system_element="NO" requirement_ids="dp-fun-40" startup_priority="1" instances_min="1" instances_max="1">
+    <Property name="TASTE_IV_Properties::Default_Codegen" value="Ada"/>
+<Provided_Interface id="{58453814-b6ce-48e1-b191-de750bcdf69b}" name="tick" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+</Provided_Interface>
+
+<Required_Interface id="{45589777-faae-40e1-b194-958e5054fbef}" name="submit" kind="Protected" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" wcet="0">
+    <Input_Parameter name="p1" type="ParameterValue" encoding="NATIVE"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+    <Implementations>
+        <Implementation name="default" language="C"/>
+    </Implementations>
+</Function>
+
+<Function id="{17485a96-8307-419b-b49b-e979da978882}" name="Archive" is_type="NO" language="C" default_implementation="default" fixed_system_element="NO" required_system_element="NO" startup_priority="1" instances_min="1" instances_max="1">
+    <Property name="TASTE_IV_Properties::Default_Codegen" value="Ada"/>
+<Provided_Interface id="{656c12f4-b5e0-44bf-a5e6-a236c1b79257}" name="tm" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="TM" encoding="ACN"/>
+</Provided_Interface>
+
+    <Implementations>
+        <Implementation name="default" language="C"/>
+    </Implementations>
+</Function>
+
+<Function id="{b3529bf4-7338-4df0-96b2-ff1dd49446ba}" Comment="Provides TC/TM transcoding capabilities to the TC TM Interface" name="Transcoder" is_type="NO" language="Blackbox_C" default_implementation="default" fixed_system_element="NO" required_system_element="NO" requirement_ids="dp-if-30" startup_priority="1" instances_min="1" instances_max="1">
+    <Property name="TASTE_IV_Properties::Default_Codegen" value="Ada"/>
+<Provided_Interface id="{20496e2c-416b-4607-9898-3747a39f807c}" name="tc" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="TC" encoding="ACN"/>
+</Provided_Interface>
+
+<Required_Interface id="{f191bceb-abfe-4e91-81c6-0334a733e3e7}" name="tm" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" queue_size="1" stack_size="1024" wcet="0" priority="1" miat="0">
+    <Input_Parameter name="p1" type="TM" encoding="ACN"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+    <Implementations>
+        <Implementation name="default" language="Blackbox_C"/>
+    </Implementations>
+</Function>
+
+<Connection id="{712522d0-ab67-4fc0-b0b8-324fb82e7862}" name="Service_Frontend_command____CANOpenMaster_command" required_system_element="NO">
+    <Source iface_id="{18cdc41f-db84-46b3-b802-89a90427160a}" func_name="Service_Frontend" ri_name="command" />
+    <Target iface_id="{18c032f4-39fb-4051-8e5c-668a1f21d94f}" func_name="CANOpenMaster" pi_name="command" />
+</Connection>
+
+<Connection id="{b05a2d38-49c0-4fda-a8ec-c8921702e1f3}" name="CANOpenMaster_pdu_out____CANOpenSlave_pdu_out" required_system_element="NO">
+    <Source iface_id="{076ca0fb-3663-4378-a85c-8b1dc96cb693}" func_name="CANOpenMaster" ri_name="pdu_out" />
+    <Target iface_id="{2ac6b5e2-3a80-4ebf-9f5a-1e752a2c3943}" func_name="CANOpenSlave" pi_name="pdu_out" />
+</Connection>
+
+<Connection id="{b4570b1e-9a13-41e1-9b90-9a446078e1eb}" required_system_element="NO">
+    <Source iface_id="{75d10afa-4f1e-478d-a9d9-609614468574}" func_name="Syncer" ri_name="tick" />
+    <Target iface_id="{cc465677-ac0d-40f7-9ce7-309b52dc79ab}" func_name="Service_Frontend" pi_name="tick" />
+</Connection>
+
+<Connection id="{5d2e6b87-3789-41df-bc1a-42c383c4a56e}" name="Service_Frontend_response____TC_TM_Interface_response" required_system_element="NO">
+    <Source iface_id="{5a6bd997-24dd-4dfb-9408-b73efad61025}" func_name="Service_Frontend" ri_name="response" />
+    <Target iface_id="{637fab93-c813-4a55-bf67-741a9787eb14}" func_name="TC_TM_Interface" pi_name="response" />
+</Connection>
+
+<Connection id="{f16cac1a-1f05-4785-9935-921f7013afb3}" name="TC_TM_Interface_uart_tm____EGSE_IF_uart_tm" required_system_element="NO">
+    <Source iface_id="{66a72590-ab3b-47e7-8630-4e17eecf9d2f}" func_name="TC_TM_Interface" ri_name="uart_tm" />
+    <Target iface_id="{6cfa0662-fe26-43ef-b982-9300b0c8a870}" func_name="EGSE_IF" pi_name="uart_tm" />
+</Connection>
+
+<Connection id="{9e6cfe4d-2389-4c83-8521-3c2cecd0cb37}" name="TC_TM_Interface_tc____Transcoder_tc" required_system_element="NO">
+    <Source iface_id="{5f71eae4-8158-4f92-8e41-bc682c79606a}" func_name="TC_TM_Interface" ri_name="tc" />
+    <Target iface_id="{20496e2c-416b-4607-9898-3747a39f807c}" func_name="Transcoder" pi_name="tc" />
+</Connection>
+
+<Connection id="{ed70b5c2-5a14-45c1-8e06-26de8ee3c3ee}" name="CANOpenSlave_pdu_in____CANOpenMaster_pdu_in" required_system_element="NO">
+    <Source iface_id="{70a44ed1-5a04-4cf4-a89c-01aee3a5b462}" func_name="CANOpenSlave" ri_name="pdu_in" />
+    <Target iface_id="{eb478793-37e3-4798-b90d-521b4de78d02}" func_name="CANOpenMaster" pi_name="pdu_in" />
+</Connection>
+
+<Connection id="{7b9c36d3-5799-45dd-995d-e6f78498ee57}" name="CnC_request____EGSE_Transcoder_request" required_system_element="NO">
+    <Source iface_id="{865b64a2-64a8-490c-9979-7976225c9bc8}" func_name="CnC" ri_name="request" />
+    <Target iface_id="{2d1f16d6-ee97-41d7-b880-94e020bc2de7}" func_name="EGSE_Transcoder" pi_name="request" />
+</Connection>
+
+<Connection id="{a5d89e97-5ef8-4e0f-be41-64a9be0c3d36}" name="EGSE_Transcoder_response____CnC_response" required_system_element="NO">
+    <Source iface_id="{7ad5b041-033d-46f1-822f-bade53b106dc}" func_name="EGSE_Transcoder" ri_name="response" />
+    <Target iface_id="{9eaa1896-1480-4004-9504-20a4f283ab6e}" func_name="CnC" pi_name="response" />
+</Connection>
+
+<Connection id="{ba6d8065-554a-4be2-ad56-96392c2750e9}" name="EGSE_IF_uart_tc____TC_TM_Interface_uart_tc" required_system_element="NO">
+    <Source iface_id="{3cb1d68b-4869-42e8-8268-cc2c734fe323}" func_name="EGSE_IF" ri_name="uart_tc" />
+    <Target iface_id="{53b4399f-40d2-400a-934d-89b2d9e2896c}" func_name="TC_TM_Interface" pi_name="uart_tc" />
+</Connection>
+
+<Connection id="{12a09d36-a18e-4f09-abcc-e60eef9269a4}" required_system_element="NO">
+    <Source iface_id="{183b4fed-2e01-4c3b-b1c2-b7cef58040de}" func_name="CANOpenMaster" ri_name="submit" />
+    <Target iface_id="{a699aba9-2ba1-4c83-baaf-bf8070c834c7}" func_name="DataPool" pi_name="submit" />
+</Connection>
+
+<Connection id="{9497158f-7ce4-4b88-9bc4-b472cca4a508}" name="Service_Frontend_retrieve____DataPool_retrieve" required_system_element="NO">
+    <Source iface_id="{85a186a5-875c-4b3f-b500-8b8ec0d05b64}" func_name="Service_Frontend" ri_name="retrieve" />
+    <Target iface_id="{f97f6edd-8926-436f-b8ff-7de6f00795be}" func_name="DataPool" pi_name="retrieve" />
+</Connection>
+
+<Connection id="{1f4f8841-7147-4986-8710-c10602b71116}" name="SensorArray_submit____DataPool_submit" required_system_element="NO">
+    <Source iface_id="{45589777-faae-40e1-b194-958e5054fbef}" func_name="SensorArray" ri_name="submit" />
+    <Target iface_id="{a699aba9-2ba1-4c83-baaf-bf8070c834c7}" func_name="DataPool" pi_name="submit" />
+</Connection>
+
+<Connection id="{60d938a7-ae09-454c-9b34-bfc8fcbdb84d}" name="TC_TM_Interface_request____Service_Frontend_request" required_system_element="NO">
+    <Source iface_id="{01aa9e2f-fe8a-47e7-80b8-0117405a51d2}" func_name="TC_TM_Interface" ri_name="request" />
+    <Target iface_id="{6d05d0b7-7072-4624-b40d-516772551fe2}" func_name="Service_Frontend" pi_name="request" />
+</Connection>
+
+<Connection id="{f8fe3605-3c57-4030-863c-e142b66f7f3e}" required_system_element="NO">
+    <Source iface_id="{75d10afa-4f1e-478d-a9d9-609614468574}" func_name="Syncer" ri_name="tick" />
+    <Target iface_id="{ff516d61-e2c1-4ec3-8cb1-93529e2c8ae8}" func_name="CANOpenMaster" pi_name="tick" />
+</Connection>
+
+<Connection id="{165fe7a0-3619-40ac-9bae-7e55e83efedf}" name="Transcoder_tm____TC_TM_Interface_tm" required_system_element="NO">
+    <Source iface_id="{f191bceb-abfe-4e91-81c6-0334a733e3e7}" func_name="Transcoder" ri_name="tm" />
+    <Target iface_id="{6dbb6ee2-715e-4967-969e-0afe77cd9b71}" func_name="TC_TM_Interface" pi_name="tm" />
+</Connection>
+
+<Connection id="{9112df55-1270-42a3-af98-5cdc047e2ec3}" name="Syncer_tick____SensorArray_tick" required_system_element="NO">
+    <Source iface_id="{75d10afa-4f1e-478d-a9d9-609614468574}" func_name="Syncer" ri_name="tick" />
+    <Target iface_id="{58453814-b6ce-48e1-b191-de750bcdf69b}" func_name="SensorArray" pi_name="tick" />
+</Connection>
+
+<Connection id="{44f323b7-7204-45aa-a1e1-28f3fd2d8d78}" name="EGSE_Transcoder_tc____EGSE_IF_tc" required_system_element="NO">
+    <Source iface_id="{d31597e3-053d-4dd8-808e-3e65317c8d86}" func_name="EGSE_Transcoder" ri_name="tc" />
+    <Target iface_id="{f892b3ec-f335-4331-8da8-4a0a19b63e20}" func_name="EGSE_IF" pi_name="tc" />
+</Connection>
+
+<Connection id="{5ae7ca8a-a28e-46e9-b2e8-2d8207c03dc2}" required_system_element="NO">
+    <Source iface_id="{375bce03-def1-4662-8ec3-59a6d0093c53}" func_name="Actuation" ri_name="submit" />
+    <Target iface_id="{a699aba9-2ba1-4c83-baaf-bf8070c834c7}" func_name="DataPool" pi_name="submit" />
+</Connection>
+
+<Connection id="{b4edeabb-5cbc-4ceb-a91c-617a02c43634}" name="Service_Frontend_actuate____Actuation_actuate" required_system_element="NO">
+    <Source iface_id="{1306cb03-8d26-43a1-ab47-455e3176e6de}" func_name="Service_Frontend" ri_name="actuate" />
+    <Target iface_id="{d8c64dbd-d585-4c85-803c-6ec3e97046e9}" func_name="Actuation" pi_name="actuate" />
+</Connection>
+
+<Connection id="{7d01a499-6e14-4c3b-9ac0-68a32d1b5d5a}" name="EGSE_IF_tm____EGSE_Transcoder_tm" required_system_element="NO">
+    <Source iface_id="{78c4deed-b125-4c2b-8c80-f12c9692af44}" func_name="EGSE_IF" ri_name="tm" />
+    <Target iface_id="{5c7170b8-72f7-4280-93d6-c7a8651dd0cc}" func_name="EGSE_Transcoder" pi_name="tm" />
+</Connection>
+
+<Connection id="{8afe085b-4313-404c-842a-a703d5cbeb33}" name="EGSE_Transcoder_param____Parameter_Monitor_param" required_system_element="NO">
+    <Source iface_id="{1c207dc1-5d02-4ce7-b737-3eb43997892d}" func_name="EGSE_Transcoder" ri_name="param" />
+    <Target iface_id="{87c857b5-5e01-42b9-be41-14945b4095f9}" func_name="Parameter_Monitor" pi_name="param" />
+</Connection>
+
+<Connection id="{ed9b7227-f5bb-4e1c-a23d-275a73af6fb9}" name="EGSE_Transcoder_tm____Archive_tm" required_system_element="NO">
+    <Source iface_id="{8931d303-94e5-4178-b83f-467dbd212c83}" func_name="EGSE_Transcoder" ri_name="tm" />
+    <Target iface_id="{656c12f4-b5e0-44bf-a5e6-a236c1b79257}" func_name="Archive" pi_name="tm" />
+</Connection>
+
+<Comment id="{8252e12d-3562-42b6-8b2e-9aecbb09be41}" name="This is a demonstration project. Its data is meant to drive the generation of ECSS documentation examples\n" required_system_element="NO">
+</Comment>
+
+<Layer name="default" is_visible="true"/>
+
+</InterfaceView>
