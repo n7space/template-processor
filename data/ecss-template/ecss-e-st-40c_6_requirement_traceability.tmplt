@@ -15,15 +15,32 @@ for func in interface_view.functions:
     funcs.append(func)
     funcs.extend(get_function_children(func))
 
+# Get functions deployed to the target partition
+target_partition_name = "ASW"
+
+deployed_funcs = []
+target_partition = None
+for node in deployment_view.nodes:
+    for partition in node.partitions:
+        if partition.name == target_partition_name:
+            target_partition = partition
+        
+deployed_func_names = [f.name for f in target_partition.functions]
+for fun in funcs:
+    if fun.name in deployed_func_names:
+        deployed_funcs.append(fun)
+
+
 # Get all requirements
 req_map = {}
-for func in funcs:
+for func in deployed_funcs:
     for req_id in func.requirement_ids:
         if not req_id in req_map:
             req_map[req_id] = []
         req_map[req_id].append(func)
 
 req_ids = sorted(req_map.keys()) # This can be sourced from an external (e.g., JSON) file, if needed
+
 %>
 
 ${"#"} Forward traceability matrix
@@ -42,6 +59,6 @@ ${"#"} Backward traceability matrix
 
 | Component | Requirement IDs |
 | - | - |
-% for func in funcs:
+% for func in deployed_funcs:
 | ${func.name} | ${",".join(func.requirement_ids)} |
 % endfor
