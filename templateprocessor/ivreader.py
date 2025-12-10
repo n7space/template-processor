@@ -177,6 +177,7 @@ class IVReader:
         iface = FunctionInterface(
             id=elem.get("id", ""),
             name=elem.get("name", ""),
+            comment=elem.get("Comment", ""),
             kind=InterfaceKind(elem.get("kind", "")),
             enable_multicast=elem.get("enable_multicast", "true") == "true",
             layer=elem.get("layer", "default"),

@@ -1,1 +1,74 @@
-TODO real-time constraints
+<%
+## Data Initialization
+# Get all functions
+
+funcs = []
+def get_function_children(func):
+    result = []
+    if func.nested_functions:
+        for nested in func.nested_functions:
+            result.append(nested)
+            result.extend(get_function_children(nested))
+    return result
+
+for func in interface_view.functions:
+    funcs.append(func)
+    funcs.extend(get_function_children(func))
+
+funcs.sort(key=lambda f: f.name.lower())
+
+# Get functions deployed to the target partition
+target_partition_name = values["TARGET"]
+
+deployed_funcs = []
+target_partition = None
+for node in deployment_view.nodes:
+    for partition in node.partitions:
+        if partition.name == target_partition_name:
+            target_partition = partition
+        
+deployed_func_names = [f.name for f in target_partition.functions]
+for fun in funcs:
+    if fun.name in deployed_func_names:
+        deployed_funcs.append(fun)
+
+# Get all threads
+threads = []
+for func in deployed_funcs:
+    for pi in func.provided_interfaces:
+        if pi.kind.value == "Sporadic" or pi.kind.value == "Cyclic":
+            threads.append((func, pi))
+
+%>
+
+
+The list below summarizes all threads of the user components.
+% for (func, pi) in threads:
+
+${"##"} [${pi.kind.value}] ${func.name}::${pi.name}
+
+- Description: ${pi.comment}
+
+- Stack size: ${pi.stack_size}
+
+% if pi.kind.value == "Sporadic":
+- Queue size: ${pi.queue_size}
+
+% endif
+- Priority: ${pi.priority}
+
+% if pi.kind.value == "Cyclic":
+- Period: ${pi.period}
+
+- Dispatch offset : ${pi.dispatch_offset}
+%endif
+
+% if pi.wcet is not None and pi.wcet != 0:
+- WCET: ${pi.wcet}
+
+%endif
+% if pi.miat is not None and pi.miat != 0:
+- MIAT: ${pi.miat} 
+
+% endif
+% endfor

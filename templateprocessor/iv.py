@@ -78,6 +78,7 @@ class FunctionInterface:
 
     id: str
     name: str
+    comment: str
     kind: InterfaceKind
     enable_multicast: bool = True
     layer: str = "default"
