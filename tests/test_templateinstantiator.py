@@ -527,3 +527,31 @@ Node: ${node.name}
         assert "Requirements: r20, r21" in result
         assert "Node: SAM V71 RTEMS N7S_1" in result
         assert "Requirements: None" in result
+
+    def test_instantiate_template_with_values(self):
+        """Test instantiating a template that uses provided values."""
+        iv = self.create_sample_interface_view()
+        dv = self.create_sample_deployment_view()
+        so_types = self.create_sample_system_object_types()
+
+        values = {
+            "project_name": "MyProject",
+            "version": "2.1.0",
+            "author": "Test Author",
+            "description": "Test project description",
+        }
+
+        instantiator = TemplateInstantiator(iv, dv, so_types, values)
+
+        template = """Project: ${values['project_name']}
+Version: ${values['version']}
+Author: ${values['author']}
+Description: ${values['description']}"""
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            result = instantiator.instantiate(template, tmpdir)
+
+        assert "Project: MyProject" in result
+        assert "Version: 2.1.0" in result
+        assert "Author: Test Author" in result
+        assert "Description: Test project description" in result
