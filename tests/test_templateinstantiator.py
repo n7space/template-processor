@@ -45,13 +45,18 @@ class TestTemplateInstantiator:
 
         # Create a sample function
         func = Function(
-            id="func_1", name="TestFunction", is_type=False, language=Language.C
+            id="func_1",
+            comment="No Comment",
+            name="TestFunction",
+            is_type=False,
+            language=Language.C,
         )
 
         # Add a provided interface
         pi = ProvidedInterface(
             id="pi_1",
             name="test_pi",
+            comment="No Comment",
             kind=InterfaceKind.SPORADIC,
         )
         pi.input_parameters = [
@@ -63,6 +68,7 @@ class TestTemplateInstantiator:
         ri = RequiredInterface(
             id="ri_1",
             name="test_ri",
+            comment="No Comment",
             kind=InterfaceKind.CYCLIC,
         )
         ri.output_parameters = [
@@ -214,7 +220,7 @@ class TestTemplateInstantiator:
         dv = self.create_sample_deployment_view()
         so_types = self.create_sample_system_object_types()
 
-        instantiator = TemplateInstantiator(iv, dv, so_types)
+        instantiator = TemplateInstantiator(iv, dv, so_types, {})
 
         assert instantiator.interface_view == iv
         assert instantiator.system_object_types == so_types
@@ -225,7 +231,7 @@ class TestTemplateInstantiator:
         iv = self.create_sample_interface_view()
         dv = self.create_sample_deployment_view()
         so_types = self.create_sample_system_object_types()
-        instantiator = TemplateInstantiator(iv, dv, so_types)
+        instantiator = TemplateInstantiator(iv, dv, so_types, {})
 
         template = "Hello World!"
 
@@ -239,7 +245,7 @@ class TestTemplateInstantiator:
         iv = self.create_sample_interface_view()
         dv = self.create_sample_deployment_view()
         so_types = self.create_sample_system_object_types()
-        instantiator = TemplateInstantiator(iv, dv, so_types)
+        instantiator = TemplateInstantiator(iv, dv, so_types, {})
 
         template = """Interface View version: ${interface_view.version}
 ASN1 file: ${interface_view.asn1file}
@@ -257,7 +263,7 @@ Number of functions: ${len(interface_view.functions)}"""
         iv = self.create_sample_interface_view()
         dv = self.create_sample_deployment_view()
         so_types = self.create_sample_system_object_types()
-        instantiator = TemplateInstantiator(iv, dv, so_types)
+        instantiator = TemplateInstantiator(iv, dv, so_types, {})
 
         template = """% for func in interface_view.functions:
 Function: ${func.name}
@@ -279,7 +285,7 @@ Required Interfaces: ${len(func.required_interfaces)}
         iv = self.create_sample_interface_view()
         dv = self.create_sample_deployment_view()
         so_types = self.create_sample_system_object_types()
-        instantiator = TemplateInstantiator(iv, dv, so_types)
+        instantiator = TemplateInstantiator(iv, dv, so_types, {})
 
         template = """Number of System Object Types: ${len(system_object_types)}
 % for name, so_type in system_object_types.items():
@@ -300,7 +306,7 @@ Required Interfaces: ${len(func.required_interfaces)}
         iv = self.create_sample_interface_view()
         dv = self.create_sample_deployment_view()
         so_types = self.create_sample_system_object_types()
-        instantiator = TemplateInstantiator(iv, dv, so_types)
+        instantiator = TemplateInstantiator(iv, dv, so_types, {})
 
         template = """% for name, so_type in system_object_types.items():
 [${name}]
@@ -331,7 +337,7 @@ Required Interfaces: ${len(func.required_interfaces)}
 
         so_types = {}
 
-        instantiator = TemplateInstantiator(iv, dv, so_types)
+        instantiator = TemplateInstantiator(iv, dv, so_types, {})
 
         template = """Version: ${interface_view.version}
 Functions: ${len(interface_view.functions)}
@@ -349,7 +355,7 @@ System Object Types: ${len(system_object_types)}"""
         iv = self.create_sample_interface_view()
         dv = self.create_sample_deployment_view()
         so_types = self.create_sample_system_object_types()
-        instantiator = TemplateInstantiator(iv, dv, so_types)
+        instantiator = TemplateInstantiator(iv, dv, so_types, {})
 
         template = """<%
 total_interfaces = sum(len(f.provided_interfaces) + len(f.required_interfaces) for f in interface_view.functions)
@@ -369,7 +375,7 @@ Total System Object Instances: ${total_instances}"""
         iv = self.create_sample_interface_view()
         dv = self.create_sample_deployment_view()
         so_types = self.create_sample_system_object_types()
-        instantiator = TemplateInstantiator(iv, dv, so_types)
+        instantiator = TemplateInstantiator(iv, dv, so_types, {})
 
         template = """Deployment View version: ${deployment_view.version}
 UI file: ${deployment_view.ui_file}
@@ -389,7 +395,7 @@ Number of connections: ${len(deployment_view.connections)}"""
         iv = self.create_sample_interface_view()
         dv = self.create_sample_deployment_view()
         so_types = self.create_sample_system_object_types()
-        instantiator = TemplateInstantiator(iv, dv, so_types)
+        instantiator = TemplateInstantiator(iv, dv, so_types, {})
 
         template = """% for node in deployment_view.nodes:
 Node: ${node.name}
@@ -415,7 +421,7 @@ Devices: ${len(node.devices)}
         iv = self.create_sample_interface_view()
         dv = self.create_sample_deployment_view()
         so_types = self.create_sample_system_object_types()
-        instantiator = TemplateInstantiator(iv, dv, so_types)
+        instantiator = TemplateInstantiator(iv, dv, so_types, {})
 
         template = """% for node in deployment_view.nodes:
 ${node.name}
@@ -445,7 +451,7 @@ Partition: ${partition.name}
         iv = self.create_sample_interface_view()
         dv = self.create_sample_deployment_view()
         so_types = self.create_sample_system_object_types()
-        instantiator = TemplateInstantiator(iv, dv, so_types)
+        instantiator = TemplateInstantiator(iv, dv, so_types, {})
 
         template = """% for node in deployment_view.nodes:
 % if node.devices:
@@ -473,7 +479,7 @@ Node: ${node.name}
         iv = self.create_sample_interface_view()
         dv = self.create_sample_deployment_view()
         so_types = self.create_sample_system_object_types()
-        instantiator = TemplateInstantiator(iv, dv, so_types)
+        instantiator = TemplateInstantiator(iv, dv, so_types, {})
 
         template = """% for conn in deployment_view.connections:
 Connection: ${conn.name}
@@ -503,7 +509,7 @@ Connection: ${conn.name}
         iv = self.create_sample_interface_view()
         dv = self.create_sample_deployment_view()
         so_types = self.create_sample_system_object_types()
-        instantiator = TemplateInstantiator(iv, dv, so_types)
+        instantiator = TemplateInstantiator(iv, dv, so_types, {})
 
         template = """% for node in deployment_view.nodes:
 Node: ${node.name}
