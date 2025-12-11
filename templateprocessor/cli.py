@@ -13,6 +13,7 @@ from templateprocessor.templateinstantiator import TemplateInstantiator
 from templateprocessor.ivreader import IVReader
 from templateprocessor.soreader import SOReader
 from templateprocessor.dvreader import DVReader
+from templateprocessor.so import SystemObjectType
 
 
 def parse_arguments() -> argparse.Namespace:
@@ -125,6 +126,47 @@ def get_values_dictionary(values: list[str]) -> dict[str, str]:
     return result
 
 
+def read_sots(file_names: list[str]) -> dict[str, SystemObjectType]:
+    sots = {}
+    so_reader = SOReader()
+    for sot_file in file_names:
+        try:
+            logging.info(f"Reading System Objects from {sot_file}")
+            name = Path(sot_file).stem
+            logging.debug(f"-SOT name: {name}")
+            sos = so_reader.read(sot_file)
+            sots[name] = sos
+        except Exception as e:
+            logging.error(f"Could not read System Objects from {sot_file}")
+    return sots
+
+
+def instantiate(
+    instantiator: TemplateInstantiator,
+    template_file: str,
+    module_directory: str,
+    output_directory: str,
+):
+    try:
+        logging.info(f"Processing template {template_file}")
+        name = Path(template_file).stem
+        logging.debug(f"Base name: {name}")
+        logging.debug(f"Reading template {template_file}")
+        with open(template_file, "r") as f:
+            template = f.read()
+        logging.debug(f"Instantiating template:\n {template}")
+        instantiated_template = instantiator.instantiate(template, module_directory)
+        logging.debug(f"Instantiation:\n {instantiated_template}")
+        output = Path(output_directory) / f"{name}.md"
+        logging.debug(f"Saving to {output}")
+        with open(output, "w") as f:
+            f.write(instantiated_template)
+    except FileNotFoundError as e:
+        logging.error(f"File not found: {e.filename}")
+    except Exception as e:
+        logging.error(f"Error processing template {template_file}: {e}")
+
+
 def main():
     """Main entry point for the Template Processor CLI."""
 
@@ -143,17 +185,13 @@ def main():
 
     logging.info(f"Reading Interface View from {args.iv}")
     iv = IVReader().read(args.iv) if args.iv else InterfaceView()
+
     logging.info(f"Reading Deployment View from {args.dv}")
     dv = DVReader().read(args.dv) if args.dv else DeploymentView()
-    sots = {}
-    if args.sos:
-        so_reader = SOReader()
-        for sot_file in args.sos:
-            logging.info(f"Reading System Objects from {sot_file}")
-            name = Path(sot_file).stem
-            logging.debug(f"-SOT name: {name}")
-            sos = so_reader.read(sot_file)
-            sots[name] = sos
+
+    logging.info(f"Reading provided System Objects")
+    sots = read_sots(args.sos) if args.sos else {}
+
     logging.info(f"Parsing values from {args.value}")
     values = get_values_dictionary(args.value)
 
@@ -161,22 +199,9 @@ def main():
     instantiator = TemplateInstantiator(iv, dv, sots, values)
 
     if args.template:
+        logging.info(f"Instantiating templates")
         for template_file in args.template:
-            logging.info(f"Processing template {template_file}")
-            name = Path(template_file).stem
-            logging.debug(f"Base name: {name}")
-            logging.debug(f"Reading template {template_file}")
-            with open(template_file, "r") as f:
-                template = f.read()
-            logging.debug(f"Instantiating template:\n {template}")
-            instantiated_template = instantiator.instantiate(
-                template, args.module_directory
-            )
-            logging.debug(f"Instantiation:\n {instantiated_template}")
-            output = Path(args.output) / f"{name}.md"
-            logging.debug(f"Saving to {output}")
-            with open(output, "w") as f:
-                f.write(instantiated_template)
+            instantiate(instantiator, template_file, args.module_directory, args.output)
 
     return 0
 
