@@ -51,7 +51,12 @@ def process_list_items(list_element: Tag, doc: Document, style_base: str, level=
             process_list_items(nested_ol, doc, "List Number", level + 1)
 
 
-def markdown_to_word(markdown_source: str, word_file_path: str):
+def markdown_to_word_file(markdown_source: str, word_file_path: str):
+    doc = markdown_to_word_object(markdown_source)
+    doc.save(word_file_path)
+
+
+def markdown_to_word_object(markdown_source: str) -> Document:
     # Converting Markdown to HTML
     html_content = markdown2.markdown(markdown_source, extras=["tables", "wiki-tables"])
 
@@ -108,4 +113,4 @@ def markdown_to_word(markdown_source: str, word_file_path: str):
                             for run in paragraph.runs:
                                 run.bold = True
 
-    doc.save(word_file_path)
+    return doc

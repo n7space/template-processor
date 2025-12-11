@@ -37,7 +37,7 @@ class Md2docxPostprocessor(AbstractPostprocessor):
 
     def process(self, text: str, base_file_name: str) -> None:
         output_file_name = f"{base_file_name}.docx"
-        md2docx.markdown_to_word(text, output_file_name)
+        md2docx.markdown_to_word_file(text, output_file_name)
 
 
 class Md2HtmlPostprocessor(AbstractPostprocessor):
