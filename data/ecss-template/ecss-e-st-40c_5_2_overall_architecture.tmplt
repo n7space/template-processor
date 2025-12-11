@@ -1,0 +1,102 @@
+<%
+## Data Initialization
+# Get all functions
+
+funcs = []
+def get_function_children(func):
+    result = []
+    if func.nested_functions:
+        for nested in func.nested_functions:
+            result.append(nested)
+            result.extend(get_function_children(nested))
+    return result
+
+for func in interface_view.functions:
+    funcs.append(func)
+    funcs.extend(get_function_children(func))
+
+funcs.sort(key=lambda f: f.name.lower())
+
+# Get functions deployed to the target partition
+target_partition_name = values["TARGET"]
+
+deployed_funcs = []
+target_partition = None
+target_node = None
+for node in deployment_view.nodes:
+    for partition in node.partitions:
+        if partition.name == target_partition_name:
+            target_node = node
+            target_partition = partition
+        
+deployed_func_names = [f.name for f in target_partition.functions]
+for fun in funcs:
+    if fun.name in deployed_func_names:
+        deployed_funcs.append(fun)
+
+# Only leaf functions are deployed, so a correction for parents must be applied
+for func in funcs:
+    if func.nested_functions:
+        for nested in func.nested_functions:
+            if nested in deployed_funcs and not func in deployed_funcs:
+                deployed_funcs.append(func)
+                deployed_func_names.append(func.name) 
+
+%>
+
+Components of ${target_partition_name} are enumerated in 4.1 Software Static Architecture, while threads are de described in 4.2 Software Dynamic Architecture.
+Details of each of the components are provided in 5.4 Aspects of each Component. Scheduling is pre-emptive, multithreaded, provided by ${node.type}.
+<%
+mutex_function_names = set()
+thread_function_names = set()
+for func in deployed_funcs:
+    if len(func.nested_functions) > 0:
+        continue 
+    for pi in func.provided_interfaces:
+        if pi.kind.value != "Unprotected":
+            mutex_function_names.add(func.name)
+        if pi.kind.value == "Cyclic" or pi.kind.value == "Sporadic":
+            thread_function_names.add(func.name)
+%>
+The following functions host threads for cyclic or sporadic interfaces (described in Chapter 4.2):
+% for func in deployed_funcs:
+<%
+if not func.name in thread_function_names:
+    continue
+%>
+
+- ${func.name}
+% endfor
+
+The following functions host semaphores, due to providing at least once cyclic, sporadic or protected interface:
+% for func in deployed_funcs:
+<%
+if not func.name in mutex_function_names:
+    continue
+%>
+
+- ${func.name}
+% endfor
+
+Table below lists the queues that the components interact through. Connections are described in detail in Chapter 5.5.
+
+| Queue | Item Type | Size |
+| - | - | - |
+% for func in deployed_funcs:
+<%
+if len(func.nested_functions) > 0:
+    continue
+%>\
+% for pi in func.provided_interfaces:
+<%
+if pi.kind.value != "Sporadic":
+    continue
+
+param = "Dummy Item"
+if len(pi.input_parameters) > 0:
+    param = pi.input_parameters[0].type
+%>\
+| ${func.name}::${pi.name} | ${param} | ${pi.queue_size} |
+% endfor
+% endfor
+
