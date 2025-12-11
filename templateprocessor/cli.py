@@ -42,7 +42,7 @@ def parse_arguments() -> argparse.Namespace:
 
     parser.add_argument(
         "-s",
-        "--sos",
+        "--system-objects",
         help="Input System Objects provided as CSV files (each as a separate argument)",
         metavar="FILE",
         action="append",
@@ -177,7 +177,7 @@ def main():
     logging.info("Template Processor")
     logging.debug(f"Interface View: {args.iv}")
     logging.debug(f"Deployment View: {args.dv}")
-    logging.debug(f"System Objects: {args.sos}")
+    logging.debug(f"System Objects: {args.system_objects}")
     logging.debug(f"Values: {args.value}")
     logging.debug(f"Templates: {args.template}")
     logging.debug(f"Output Directory: {args.output}")
@@ -190,7 +190,7 @@ def main():
     dv = DVReader().read(args.dv) if args.dv else DeploymentView()
 
     logging.info(f"Reading provided System Objects")
-    sots = read_sots(args.sos) if args.sos else {}
+    sots = read_sots(args.system_objects) if args.system_objects else {}
 
     logging.info(f"Parsing values from {args.value}")
     values = get_values_dictionary(args.value)
