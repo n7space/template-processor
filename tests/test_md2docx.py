@@ -3,7 +3,6 @@ Tests for md2docx module
 """
 
 import pytest
-from docx import Document
 from docx.document import Document as DocumentType
 from templateprocessor.md2docx import markdown_to_word_object
 
