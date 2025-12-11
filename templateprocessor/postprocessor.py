@@ -63,15 +63,15 @@ class Postprocessor:
     def __init__(self, registry: Dict[PostprocessorType, AbstractPostprocessor]):
         self.registry = registry
 
-    def process(self, type: PostprocessorType, text: str, base_file_name: str) -> None:
+    def process(self, postprocessor_type: PostprocessorType, text: str, base_file_name: str) -> None:
         """
         Process the input text and write to output file based on processor type.
 
         Args:
-            type: Desired postprocessor type
+            postprocessor_type: Desired postprocessor type
             text: Input text string to process
             base_file_name: Path to output file, without extension
         """
-        if not type in self.registry.keys():
-            raise ValueError("Not supported postprocessor {type.value}")
-        self.registry[type].process(text, base_file_name)
+        if not postprocessor_type in self.registry.keys():
+            raise ValueError(f"Not supported postprocessor {postprocessor_type.value}")
+        self.registry[postprocessor_type].process(text, base_file_name)
