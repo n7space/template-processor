@@ -135,7 +135,9 @@ class IVReader:
                 if elem.get("type_language")
                 else None
             ),
-            requirement_ids=elem.get("requirement_ids", "").split(","),
+            requirement_ids=[
+                rid for rid in elem.get("requirement_ids", "").split(",") if rid
+            ],
         )
 
         # Parse properties
@@ -195,7 +197,9 @@ class IVReader:
                 else None
             ),
             priority=int(elem.get("priority")) if elem.get("priority") else None,
-            requirement_ids=elem.get("requirement_ids", "").split(","),
+            requirement_ids=[
+                rid for rid in elem.get("requirement_ids", "").split(",") if rid
+            ],
         )
 
         # Parse input parameters

@@ -8,8 +8,8 @@ template-processor --verbosity info --value TARGET=ASW --iv demo-project/interfa
 pandoc --pdf-engine=pdfroff --output=output/ecss-e-st-40c_4_4_interfaces_context.pdf output/ecss-e-st-40c_4_4_interfaces_context.md
 template-processor --verbosity info --value TARGET=ASW --iv demo-project/interfaceview.xml --dv demo-project/deploymentview.dv.xml -o output -t ../data/ecss-template/ecss-e-st-40c_5_2_overall_architecture.tmplt
 pandoc --pdf-engine=pdfroff --output=output/ecss-e-st-40c_5_2_overall_architecture.pdf output/ecss-e-st-40c_5_2_overall_architecture.md
-template-processor --verbosity info --value TARGET=ASW --iv demo-project/interfaceview.xml --dv demo-project/deploymentview.dv.xml -o output -t ../data/ecss-template/ecss-e-st-40c_5_3_software_copmponents_design.tmplt
-pandoc --pdf-engine=pdfroff --output=output/ecss-e-st-40c_5_3_software_copmponents_design.pdf output/ecss-e-st-40c_5_3_software_copmponents_design.md
+template-processor --verbosity info --value TARGET=ASW --iv demo-project/interfaceview.xml --dv demo-project/deploymentview.dv.xml -o output -t ../data/ecss-template/ecss-e-st-40c_5_3_software_components_design.tmplt
+pandoc --pdf-engine=pdfroff --output=output/ecss-e-st-40c_5_3_software_components_design.pdf output/ecss-e-st-40c_5_3_software_components_design.md
 template-processor --verbosity info --value TARGET=ASW --iv demo-project/interfaceview.xml --dv demo-project/deploymentview.dv.xml -o output -t ../data/ecss-template/ecss-e-st-40c_5_4_aspects_of_each_component.tmplt
 pandoc --pdf-engine=pdfroff --output=output/ecss-e-st-40c_5_4_aspects_of_each_component.pdf output/ecss-e-st-40c_5_4_aspects_of_each_component.md
 template-processor --verbosity info --value TARGET=ASW --iv demo-project/interfaceview.xml --dv demo-project/deploymentview.dv.xml -o output -t ../data/ecss-template/ecss-e-st-40c_5_5_internal_interface_design.tmplt

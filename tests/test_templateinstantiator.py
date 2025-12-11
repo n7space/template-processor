@@ -4,8 +4,7 @@ Tests for TemplateInstantiator class
 
 import pytest
 import tempfile
-from pathlib import Path
-from typing import Dict, List
+from typing import Dict
 from templateprocessor.templateinstantiator import TemplateInstantiator
 from templateprocessor.iv import (
     InterfaceView,

@@ -4,7 +4,6 @@ Command Line Interface for Template Processor
 
 import logging
 import argparse
-import os
 from pathlib import Path
 import sys
 from templateprocessor import __version__
@@ -64,6 +63,13 @@ def parse_arguments() -> argparse.Namespace:
     )
 
     parser.add_argument(
+        "-m",
+        "--module-directory",
+        help="Module directory for Mako templating engine",
+        metavar="FILE",
+    )
+
+    parser.add_argument(
         "-o",
         "--output",
         help="Output directory for processed templates",
@@ -106,14 +112,14 @@ def get_values_dictionary(values: list[str]) -> dict[str, str]:
     result = {}
     for pair in values:
         if pair.count("=") != 1:
-            raise Exception(
+            raise ValueError(
                 f"Pair [{pair}] contains incorrect number of name/value separators (=)"
             )
         split = pair.split("=")
         name = split[0].strip()
         value = split[1].strip()
         if len(name) == 0:
-            raise Exception(f"Name in [{pair}] is empty")
+            raise ValueError(f"Name in [{pair}] is empty")
         # value can be empty
         result[name] = value
     return result
@@ -133,6 +139,7 @@ def main():
     logging.debug(f"Values: {args.value}")
     logging.debug(f"Templates: {args.template}")
     logging.debug(f"Output Directory: {args.output}")
+    logging.debug(f"Module directory: {args.module_directory}")
 
     logging.info(f"Reading Interface View from {args.iv}")
     iv = IVReader().read(args.iv) if args.iv else InterfaceView()
@@ -162,7 +169,9 @@ def main():
             with open(template_file, "r") as f:
                 template = f.read()
             logging.debug(f"Instantiating template:\n {template}")
-            instantiated_template = instantiator.instantiate(template, "")
+            instantiated_template = instantiator.instantiate(
+                template, args.module_directory
+            )
             logging.debug(f"Instantiation:\n {instantiated_template}")
             output = Path(args.output) / f"{name}.md"
             logging.debug(f"Saving to {output}")
