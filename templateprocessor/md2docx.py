@@ -63,7 +63,7 @@ def markdown_to_word_object(markdown_source: str) -> Document:
     # Creating a new Word Document
     doc = Document()
 
-    # Converting HTML to text and add it to the Word Document
+    # Converting HTML to text and adding it to the Word Document
     soup = BeautifulSoup(html_content, "html.parser")
 
     # Adding content to the Word Document
