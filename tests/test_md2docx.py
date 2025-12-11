@@ -24,7 +24,6 @@ class TestMarkdownToWordObject:
         # Verify
         assert isinstance(doc, DocumentType)
         paragraphs = [p.text for p in doc.paragraphs if p.text.strip()]
-        paragraphs = [p.text for p in doc.paragraphs if p.text.strip()]
         assert len(paragraphs) == 2
         assert "This is a simple paragraph." in paragraphs[0]
         assert "This is another paragraph." in paragraphs[1]
@@ -43,7 +42,6 @@ class TestMarkdownToWordObject:
         # Verify
         assert isinstance(doc, DocumentType)
         paragraphs = [p for p in doc.paragraphs if p.text.strip()]
-        assert len(paragraphs) == 3
         assert len(paragraphs) == 3
         assert paragraphs[0].text == "First item"
         assert paragraphs[1].text == "Second item"
@@ -69,7 +67,6 @@ class TestMarkdownToWordObject:
         # Verify
         assert isinstance(doc, DocumentType)
         paragraphs = [p for p in doc.paragraphs if p.text.strip()]
-        assert len(paragraphs) == 5
         assert len(paragraphs) == 5
 
         # Check text content
@@ -101,7 +98,6 @@ class TestMarkdownToWordObject:
         doc = markdown_to_word_object(markdown)
         # Verify
         assert isinstance(doc, DocumentType)
-        assert len(doc.tables) == 1
         assert len(doc.tables) == 1
 
         table = doc.tables[0]
