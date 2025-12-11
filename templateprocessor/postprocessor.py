@@ -9,10 +9,12 @@ from pathlib import Path
 from templateprocessor import md2docx
 from abc import ABC, abstractmethod
 from typing import Dict
+import markdown2
 
 
 class PostprocessorType(Enum):
     NONE = "none"
+    MD2HTML = "md2html"
     HTML2DOCX = "html2docx"
     MD2DOCX = "md2docx"
 
@@ -36,6 +38,15 @@ class Md2docxPostprocessor(AbstractPostprocessor):
     def process(self, text: str, base_file_name: str) -> None:
         output_file_name = f"{base_file_name}.docx"
         md2docx.markdown_to_word(text, output_file_name)
+
+
+class Md2HtmlPostprocessor(AbstractPostprocessor):
+
+    def process(self, text: str, base_file_name: str) -> None:
+        output_file_name = f"{base_file_name}.html"
+        html_content = markdown2.markdown(text, extras=["tables", "wiki-tables"])
+        with open(output_file_name, "w") as f:
+            f.write(html_content)
 
 
 class PassthroughPostprocessor(AbstractPostprocessor):

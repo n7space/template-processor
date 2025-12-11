@@ -17,6 +17,7 @@ from templateprocessor.so import SystemObjectType
 from templateprocessor.postprocessor import (
     PostprocessorType,
     Md2docxPostprocessor,
+    Md2HtmlPostprocessor,
     PassthroughPostprocessor,
     Postprocessor,
 )
@@ -94,7 +95,7 @@ def parse_arguments() -> argparse.Namespace:
     parser.add_argument(
         "-p",
         "--postprocess",
-        choices=["none", "md2docx"],
+        choices=["none", "md2docx", "md2html"],
         help="Output postprocessing",
         default="none",
     )
@@ -118,6 +119,7 @@ def get_postprocessor_type(type_str: str) -> PostprocessorType:
         PostprocessorType.NONE.value: PostprocessorType.NONE,
         PostprocessorType.HTML2DOCX.value: PostprocessorType.HTML2DOCX,
         PostprocessorType.MD2DOCX.value: PostprocessorType.MD2DOCX,
+        PostprocessorType.MD2HTML.value: PostprocessorType.MD2HTML,
     }
 
     return types.get(type_str.lower(), PostprocessorType.NONE)
@@ -175,7 +177,7 @@ def instantiate(
         logging.debug(f"Instantiating template:\n {template}")
         instantiated_template = instantiator.instantiate(template, module_directory)
         logging.debug(f"Instantiation:\n {instantiated_template}")
-        output = Path(output_directory) / f"{name}"
+        output = str(Path(output_directory) / f"{name}")
         logging.debug(f"Postprocessing")
         postprocessor.process(type, instantiated_template, output)
     except FileNotFoundError as e:
@@ -222,6 +224,7 @@ def main():
         {
             PostprocessorType.NONE: PassthroughPostprocessor(),
             PostprocessorType.MD2DOCX: Md2docxPostprocessor(),
+            PostprocessorType.MD2HTML: Md2HtmlPostprocessor(),
         }
     )
 

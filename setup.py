@@ -32,7 +32,8 @@ setup(
     install_requires=[
         "mako==1.3.10",
         "python-docx==1.2.0",
-        "bs4==0.0.2"
+        "bs4==0.0.2",
+        "markdown2==2.5.4"
     ],
     extras_require={
         'dev': [
