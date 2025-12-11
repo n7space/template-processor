@@ -46,8 +46,6 @@ for func in funcs:
                 deployed_funcs.append(func)
                 deployed_func_names.append(func.name) 
 
-print(f"Deployed Functions: {[func.name for func in deployed_funcs]}")
-
 # Find and crossreference all connections
 def get_function_connections(func):
     result = []
@@ -66,20 +64,14 @@ for func in interface_view.functions:
 external_connections = []
 
 for connection in connections:
-    print(f"Processing connection {connection.name} from {connection.source.function_name} to {connection.target.function_name}")
     if connection.source is None or connection.source.function_name is None:
-        print(f"  -Rejecting due to SOURCE")
         continue
     if connection.target is None or connection.target.function_name is None:
-        print(f"  -Rejecting due to TARGET")
         continue
     target_inside = connection.target.function_name in deployed_func_names
     source_inside = connection.source.function_name in deployed_func_names 
     if (target_inside and not source_inside) or (not target_inside and source_inside):
-        print(f"  +Adding as BOUNDARY")
         external_connections.append(connection)
-    else:
-        print(f"  -Rejecting as NON-BOUNDARY")
 
 iface_source_map = {}
 iface_target_map = {}
