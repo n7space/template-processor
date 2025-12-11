@@ -15,10 +15,43 @@ Changes:
 
 import markdown2
 from docx import Document
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 
 
-def markdown_to_word(markdown_source, word_file_path):
+def get_element_text(element: Tag) -> str:
+    if hasattr(element, "get_text"):
+        return element.get_text(strip=True)
+    else:
+        return str(element).strip()
+
+
+def process_list_items(list_element: Tag, doc: Document, style_base: str, level=0):
+    # Get direct children li elements only (not nested)
+    for li in list_element.find_all("li", recursive=False):
+        # Get text content, excluding nested lists
+        text_parts = []
+        for child in li.children:
+            if child.name not in ["ul", "ol"]:
+                text_parts.append(get_element_text(child))
+
+        text = " ".join(text_parts).strip()
+
+        # Add paragraph with appropriate indentation level
+        if text:
+            style = style_base if level == 0 else f"{style_base} {level + 1}"
+            doc.add_paragraph(text, style=style)
+
+        # Process nested lists
+        nested_ul = li.find("ul", recursive=False)
+        nested_ol = li.find("ol", recursive=False)
+
+        if nested_ul:
+            process_list_items(nested_ul, doc, "List Bullet", level + 1)
+        if nested_ol:
+            process_list_items(nested_ol, doc, "List Number", level + 1)
+
+
+def markdown_to_word(markdown_source: str, word_file_path: str):
     # Converting Markdown to HTML
     html_content = markdown2.markdown(markdown_source, extras=["tables", "wiki-tables"])
 
@@ -46,11 +79,9 @@ def markdown_to_word(markdown_source, word_file_path):
                 else:
                     paragraph.add_run(child)
         elif element.name == "ul":
-            for li in element.find_all("li"):
-                doc.add_paragraph(li.text.strip(), style="List Bullet")
+            process_list_items(element, doc, "List Bullet")
         elif element.name == "ol":
-            for li in element.find_all("li"):
-                doc.add_paragraph(li.text.strip(), style="List Number")
+            process_list_items(element, doc, "List Number")
         elif element.name == "table":
             rows_data = []
             for row in element.find_all("tr"):
