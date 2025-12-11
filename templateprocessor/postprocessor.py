@@ -5,7 +5,6 @@ This module is responsible for postprocessing the instantiated text into the tar
 """
 
 from enum import Enum
-from pathlib import Path
 from templateprocessor import md2docx
 from abc import ABC, abstractmethod
 from typing import Dict
