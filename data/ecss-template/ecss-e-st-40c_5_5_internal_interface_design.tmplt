@@ -115,8 +115,9 @@ The list below summarizes all internal interfaces between user components.
 iface_handle = f"{func.name}__{iface.name}"
 if not iface_handle in iface_source_map and not iface_handle in iface_target_map:
     continue
-%> \
-${"##"} \
+%>
+
+${"#"} \
 % if iface in func.provided_interfaces:
 [PROVIDED] \
 % else:

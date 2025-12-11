@@ -1,0 +1,173 @@
+<%
+## Data Initialization
+# Get all functions
+
+def find_by_name(all, name):
+    for f in all:
+        if f.name == name:
+            return f
+    return None
+
+funcs = []
+def get_function_children(func):
+    result = []
+    if func.nested_functions:
+        for nested in func.nested_functions:
+            result.append(nested)
+            result.extend(get_function_children(nested))
+    return result
+
+for func in interface_view.functions:
+    funcs.append(func)
+    funcs.extend(get_function_children(func))
+
+funcs.sort(key=lambda f: f.name.lower())
+
+# Get functions deployed to the target partition
+target_partition_name = values["TARGET"]
+
+deployed_funcs = []
+target_partition = None
+for node in deployment_view.nodes:
+    for partition in node.partitions:
+        if partition.name == target_partition_name:
+            target_partition = partition
+        
+deployed_func_names = [f.name for f in target_partition.functions]
+for fun in funcs:
+    if fun.name in deployed_func_names:
+        deployed_funcs.append(fun)
+
+# Only leaf functions are deployed, so a correction for parents must be applied
+for func in funcs:
+    if func.nested_functions:
+        for nested in func.nested_functions:
+            if nested in deployed_funcs and not func in deployed_funcs:
+                deployed_funcs.append(func)
+                deployed_func_names.append(func.name) 
+
+print(f"Deployed Functions: {[func.name for func in deployed_funcs]}")
+
+# Find and crossreference all connections
+def get_function_connections(func):
+    result = []
+    if func.nested_connections:
+        result.extend(func.nested_connections)
+    if func.nested_functions:
+        for nested in func.nested_functions:
+            result.extend(get_function_connections(nested))
+    return result
+
+connections = []
+connections.extend(interface_view.connections)
+for func in interface_view.functions:
+    connections.extend(get_function_connections(func))
+
+external_connections = []
+
+for connection in connections:
+    print(f"Processing connection {connection.name} from {connection.source.function_name} to {connection.target.function_name}")
+    if connection.source is None or connection.source.function_name is None:
+        print(f"  -Rejecting due to SOURCE")
+        continue
+    if connection.target is None or connection.target.function_name is None:
+        print(f"  -Rejecting due to TARGET")
+        continue
+    target_inside = connection.target.function_name in deployed_func_names
+    source_inside = connection.source.function_name in deployed_func_names 
+    if (target_inside and not source_inside) or (not target_inside and source_inside):
+        print(f"  +Adding as BOUNDARY")
+        external_connections.append(connection)
+    else:
+        print(f"  -Rejecting as NON-BOUNDARY")
+
+iface_source_map = {}
+iface_target_map = {}
+
+for connection in external_connections:
+    meta = {}
+    meta["connection"] = connection
+    meta["source_function"] = find_by_name(funcs, connection.source.function_name)
+    if meta["source_function"] is None:
+        print(f"Source function {connection.source.function_name} not found")
+        continue
+    meta["source_iface"] = find_by_name(meta["source_function"].provided_interfaces + meta["source_function"].required_interfaces, connection.source.iface_name)
+    meta["target_function"] = find_by_name(funcs, connection.target.function_name)
+    if meta["target_function"] is None:
+        print(f"Target function {connection.target.function_name} not found")
+        continue
+    meta["target_iface"] = find_by_name(meta["target_function"].provided_interfaces + meta["target_function"].required_interfaces, connection.source.iface_name)
+    source_handle = f"{meta["source_function"].name}__{meta["source_iface"].name}" 
+    target_handle = f"{meta["target_function"].name}__{meta["target_iface"].name}" 
+    if not source_handle in iface_source_map.keys():
+        iface_source_map[source_handle] = []
+    iface_source_map[source_handle].append((meta["target_function"], meta["target_iface"]))
+    if not target_handle in iface_target_map.keys():
+        iface_target_map[target_handle] = []
+    iface_target_map[target_handle].append((meta["source_function"], meta["source_iface"]))
+
+%>
+
+The list below summarizes all external interfaces.
+
+% for func in deployed_funcs:
+% for iface in func.provided_interfaces + func.required_interfaces:
+<%
+iface_handle = f"{func.name}__{iface.name}"
+if not iface_handle in iface_source_map and not iface_handle in iface_target_map:
+    continue
+%>
+${"#"} \
+% if iface in func.provided_interfaces:
+[PROVIDED] \
+% else:
+[REQUIRED] \
+% endif
+[${iface.kind.value}] ${func.name}::${iface.name}
+
+- Description: ${iface.comment}
+
+% if iface.kind.value != "Cyclic":
+- Parameters:
+% for param in iface.input_parameters + iface.output_parameters:
+
+    - \
+% if param in iface.input_parameters:
+[IN] \
+% else: 
+[OUT] \
+% endif
+${param.name} ${param.type} (with ${param.encoding.value} encoding)
+% endfor
+% endif
+
+% if iface_handle in iface_source_map:
+- Connects to:
+% for (other_function, other_iface) in iface_source_map[iface_handle]:
+
+    - ${other_function.name}::${other_iface.name}
+% endfor
+% endif
+
+% if iface_handle in iface_target_map:
+- Is connected from:
+% for (other_function, other_iface) in iface_target_map[iface_handle]:
+
+    - ${other_function.name}::${other_iface.name}
+% endfor
+% endif
+
+% endfor
+% endfor
+
+The list below summarizes all external connections:
+% for connection in external_connections:
+<%
+    if connection.source is None or connection.source.function_name is None:
+        continue
+    if connection.target is None or connection.target.function_name is None:
+        continue
+%> \
+
+- Connection from ${connection.source.function_name}::${connection.source.iface_name} to ${connection.target.function_name}::${connection.target.iface_name}
+% endfor
