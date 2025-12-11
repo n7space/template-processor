@@ -1,0 +1,37 @@
+<InterfaceView version="1.3" asn1file="demo-req.acn" UiFile="interfaceview.ui.xml" modifierHash="383508e">
+<Function id="{b817e542-68fe-4c61-8a6c-e0d6686a74b8}" name="Function_1" is_type="NO" language="SDL" default_implementation="default" fixed_system_element="NO" required_system_element="NO" requirement_ids="r2,r1" startup_priority="1" instances_max="1" instances_min="1">
+    <Property name="TASTE_IV_Properties::Default_Codegen" value="Ada"/>
+<Provided_Interface id="{9277a50e-a317-4598-8f7e-e9f7fbed3929}" name="trigger" kind="Cyclic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" stack_size="1024" period="1000" dispatch_offset="0" priority="1" wcet="0">
+</Provided_Interface>
+
+<Required_Interface id="{ab166713-8312-475c-aba1-f525ec5c820e}" name="do_smth" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" requirement_ids="r5" stack_size="1024" miat="0" priority="1" wcet="0" queue_size="1">
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+    <Implementations>
+        <Implementation name="default" language="SDL"/>
+    </Implementations>
+</Function>
+
+<Function id="{2f99fc8c-2153-4b71-91c8-e4782e96c809}" name="Function_2" is_type="NO" language="SDL" default_implementation="default" fixed_system_element="NO" required_system_element="NO" startup_priority="1" instances_max="1" instances_min="1">
+    <Property name="TASTE_IV_Properties::Default_Codegen" value="Ada"/>
+<Provided_Interface id="{cdef6ab0-7130-45d5-91e4-76f84eb245e1}" name="do_smth" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" requirement_ids="r5" stack_size="1024" miat="0" priority="1" wcet="0" queue_size="1">
+</Provided_Interface>
+
+    <Implementations>
+        <Implementation name="default" language="SDL"/>
+    </Implementations>
+</Function>
+
+<Connection id="{b0e235f5-2ba1-47a1-abfe-e0cb228a1545}" name="Function_1_do_smth____Function_2_do_smth" required_system_element="NO">
+    <Source iface_id="{ab166713-8312-475c-aba1-f525ec5c820e}" func_name="Function_1" ri_name="do_smth" />
+    <Target iface_id="{cdef6ab0-7130-45d5-91e4-76f84eb245e1}" func_name="Function_2" pi_name="do_smth" />
+</Connection>
+
+<Comment id="{93e3be3f-e5b2-46b7-8ac6-98faccdb2f1d}" name="Welcome to TASTE!\n============\n\nRight click to add a function, and use Ctrl-Click to connect functions together.\n\nYou can split the screen in multiple windows using Ctrl-E-3" required_system_element="NO">
+</Comment>
+
+<Layer name="default" is_visible="true"/>
+
+</InterfaceView>

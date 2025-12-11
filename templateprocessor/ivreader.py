@@ -118,6 +118,7 @@ class IVReader:
         function = Function(
             id=elem.get("id", ""),
             name=elem.get("name", ""),
+            comment=elem.get("Comment", ""),
             is_type=elem.get("is_type", "NO") == "YES",
             language=(
                 Language(elem.get("language", "")) if elem.get("language") else None
@@ -134,6 +135,9 @@ class IVReader:
                 if elem.get("type_language")
                 else None
             ),
+            requirement_ids=[
+                rid for rid in elem.get("requirement_ids", "").split(",") if rid
+            ],
         )
 
         # Parse properties
@@ -175,6 +179,7 @@ class IVReader:
         iface = FunctionInterface(
             id=elem.get("id", ""),
             name=elem.get("name", ""),
+            comment=elem.get("Comment", ""),
             kind=InterfaceKind(elem.get("kind", "")),
             enable_multicast=elem.get("enable_multicast", "true") == "true",
             layer=elem.get("layer", "default"),
@@ -192,6 +197,9 @@ class IVReader:
                 else None
             ),
             priority=int(elem.get("priority")) if elem.get("priority") else None,
+            requirement_ids=[
+                rid for rid in elem.get("requirement_ids", "").split(",") if rid
+            ],
         )
 
         # Parse input parameters

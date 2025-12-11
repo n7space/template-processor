@@ -37,6 +37,8 @@ class Language(str, Enum):
     CPP = "C++"
     SIMULINK = "Simulink"
     QGenc = "QGenc"
+    GUI = "GUI"
+    BLACKBOX_C = "Blackbox_C"
 
 
 @dataclass
@@ -76,6 +78,7 @@ class FunctionInterface:
 
     id: str
     name: str
+    comment: str
     kind: InterfaceKind
     enable_multicast: bool = True
     layer: str = "default"
@@ -92,6 +95,7 @@ class FunctionInterface:
     input_parameters: List[InputParameter] = field(default_factory=list)
     output_parameters: List[OutputParameter] = field(default_factory=list)
     properties: List[Property] = field(default_factory=list)
+    requirement_ids: List[str] = field(default_factory=list)
 
 
 @dataclass
@@ -122,6 +126,7 @@ class Function:
 
     id: str
     name: str
+    comment: str
     is_type: bool
     language: Optional[Language] = None
     default_implementation: str = "default"
@@ -138,6 +143,7 @@ class Function:
     properties: List[Property] = field(default_factory=list)
     nested_functions: List["Function"] = field(default_factory=list)
     nested_connections: List["Connection"] = field(default_factory=list)
+    requirement_ids: List[str] = field(default_factory=list)
 
 
 @dataclass
@@ -200,10 +206,10 @@ class InterfaceView:
     and other elements that define a TASTE system's interface architecture.
     """
 
-    version: str
-    asn1file: str
-    uiFile: str
-    modifierHash: str
+    version: str = ""
+    asn1file: str = ""
+    uiFile: str = ""
+    modifierHash: str = ""
     functions: List[Function] = field(default_factory=list)
     connections: List[Connection] = field(default_factory=list)
     comments: List[Comment] = field(default_factory=list)

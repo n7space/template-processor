@@ -1,0 +1,20 @@
+${"#"} Deployment View
+% for node in deployment_view.nodes:
+% for partition in node.partitions:
+
+${"##"} ${partition.name}:
+% for func in partition.functions:
+- ${func.name}
+% endfor 
+% endfor
+% endfor
+
+${"##"} Connections:
+
+% for connection in deployment_view.connections:
+${connection.from_node} <-> ${connection.to_node}
+% for message in connection.messages:
+
+- ${message.from_function}.${message.from_interface} -> ${message.to_function}.${message.to_interface}
+% endfor
+% endfor

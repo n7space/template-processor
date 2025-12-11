@@ -1,0 +1,6 @@
+*.aadl
+*.pro.user
+*.pro.user.*
+.qtc*
+# We don't need the details to compile the project, only ASN.1/ACN, IV and DV are of interest
+work/

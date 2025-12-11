@@ -1,0 +1,21 @@
+DEMO-PROJECT-DATAVIEW DEFINITIONS ::=
+BEGIN
+
+   MyInteger ::= INTEGER (0 .. 10000)
+
+-- Dummy types with different names for documentation purposes
+
+   TC ::= INTEGER (0..10)
+   TM ::= INTEGER (0..10)
+
+   Request ::= INTEGER (0..10)
+   Response ::= INTEGER (0..10)
+
+   ParameterValue ::= INTEGER (0..10)
+
+   Cmd ::= INTEGER (0..10)
+
+   RawData ::= INTEGER (0..10)
+
+END
+
