@@ -14,6 +14,12 @@ from templateprocessor.ivreader import IVReader
 from templateprocessor.soreader import SOReader
 from templateprocessor.dvreader import DVReader
 from templateprocessor.so import SystemObjectType
+from templateprocessor.postprocessor import (
+    PostprocessorType,
+    Md2docxPostprocessor,
+    PassthroughPostprocessor,
+    Postprocessor,
+)
 
 
 def parse_arguments() -> argparse.Namespace:
@@ -107,6 +113,16 @@ def get_log_level(level_str: str) -> int:
     return log_levels.get(level_str.lower(), logging.WARNING)
 
 
+def get_postprocessor_type(type_str: str) -> PostprocessorType:
+    types = {
+        PostprocessorType.NONE.value: PostprocessorType.NONE,
+        PostprocessorType.HTML2DOCX.value: PostprocessorType.HTML2DOCX,
+        PostprocessorType.MD2DOCX.value: PostprocessorType.MD2DOCX,
+    }
+
+    return types.get(type_str.lower(), PostprocessorType.NONE)
+
+
 def get_values_dictionary(values: list[str]) -> dict[str, str]:
     if not values or not isinstance(values, list):
         return {}
@@ -143,8 +159,10 @@ def read_sots(file_names: list[str]) -> dict[str, SystemObjectType]:
 
 def instantiate(
     instantiator: TemplateInstantiator,
+    postprocessor: Postprocessor,
     template_file: str,
     module_directory: str,
+    type: PostprocessorType,
     output_directory: str,
 ):
     try:
@@ -157,10 +175,9 @@ def instantiate(
         logging.debug(f"Instantiating template:\n {template}")
         instantiated_template = instantiator.instantiate(template, module_directory)
         logging.debug(f"Instantiation:\n {instantiated_template}")
-        output = Path(output_directory) / f"{name}.md"
-        logging.debug(f"Saving to {output}")
-        with open(output, "w") as f:
-            f.write(instantiated_template)
+        output = Path(output_directory) / f"{name}"
+        logging.debug(f"Postprocessing")
+        postprocessor.process(type, instantiated_template, output)
     except FileNotFoundError as e:
         logging.error(f"File not found: {e.filename}")
     except Exception as e:
@@ -173,6 +190,7 @@ def main():
     args = parse_arguments()
     logging_level = get_log_level(args.verbosity)
     logging.basicConfig(level=logging_level)
+    type = get_postprocessor_type(args.postprocess)
 
     logging.info("Template Processor")
     logging.debug(f"Interface View: {args.iv}")
@@ -182,6 +200,7 @@ def main():
     logging.debug(f"Templates: {args.template}")
     logging.debug(f"Output Directory: {args.output}")
     logging.debug(f"Module directory: {args.module_directory}")
+    logging.debug(f"Postprocessing: {type.value}")
 
     logging.info(f"Reading Interface View from {args.iv}")
     iv = IVReader().read(args.iv) if args.iv else InterfaceView()
@@ -198,10 +217,25 @@ def main():
     logging.info(f"Instantiating the TemplateInstantiator")
     instantiator = TemplateInstantiator(iv, dv, sots, values)
 
+    logging.info(f"Instantiating the Postprocessor")
+    postprocessor = Postprocessor(
+        {
+            PostprocessorType.NONE: PassthroughPostprocessor(),
+            PostprocessorType.MD2DOCX: Md2docxPostprocessor(),
+        }
+    )
+
     if args.template:
         logging.info(f"Instantiating templates")
         for template_file in args.template:
-            instantiate(instantiator, template_file, args.module_directory, args.output)
+            instantiate(
+                instantiator,
+                postprocessor,
+                template_file,
+                args.module_directory,
+                type,
+                args.output,
+            )
 
     return 0
 

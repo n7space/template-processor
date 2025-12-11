@@ -30,7 +30,9 @@ setup(
     include_package_data=True,
     python_requires='>=3.8',
     install_requires=[
-        "mako==1.3.10"
+        "mako==1.3.10",
+        "python-docx==1.2.0",
+        "bs4==0.0.2"
     ],
     extras_require={
         'dev': [
