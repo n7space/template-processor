@@ -14,7 +14,6 @@ import markdown2
 class PostprocessorType(Enum):
     NONE = "none"
     MD2HTML = "md2html"
-    HTML2DOCX = "html2docx"
     MD2DOCX = "md2docx"
 
 
@@ -62,7 +61,9 @@ class Postprocessor:
     def __init__(self, registry: Dict[PostprocessorType, AbstractPostprocessor]):
         self.registry = registry
 
-    def process(self, postprocessor_type: PostprocessorType, text: str, base_file_name: str) -> None:
+    def process(
+        self, postprocessor_type: PostprocessorType, text: str, base_file_name: str
+    ) -> None:
         """
         Process the input text and write to output file based on processor type.
 
@@ -71,6 +72,6 @@ class Postprocessor:
             text: Input text string to process
             base_file_name: Path to output file, without extension
         """
-        if not postprocessor_type in self.registry.keys():
+        if postprocessor_type not in self.registry:
             raise ValueError(f"Not supported postprocessor {postprocessor_type.value}")
         self.registry[postprocessor_type].process(text, base_file_name)
