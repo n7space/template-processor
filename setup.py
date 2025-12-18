@@ -30,7 +30,10 @@ setup(
     include_package_data=True,
     python_requires='>=3.8',
     install_requires=[
-        "mako==1.3.10"
+        "mako==1.3.10",
+        "python-docx==1.2.0",
+        "beautifulsoup4==4.12.3",
+        "markdown2==2.5.4"
     ],
     extras_require={
         'dev': [
