@@ -1,0 +1,91 @@
+<InterfaceView version="1.3" asn1file="sdl-project.acn" UiFile="interfaceview.ui.xml" modifierHash="383508e">
+<Function id="{9d1765b1-05b0-48ee-b6a9-ee4f02f25ddc}" name="Harness" is_type="NO" language="SDL" default_implementation="default" fixed_system_element="NO" required_system_element="NO" instances_min="1" instances_max="1" startup_priority="1">
+    <Property name="TASTE_IV_Properties::Default_Codegen" value="Ada"/>
+<Provided_Interface id="{091888bf-4396-4432-a3ac-4ff042e877ef}" name="trigger" kind="Cyclic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" stack_size="1024" wcet="0" priority="1">
+</Provided_Interface>
+
+<Provided_Interface id="{769c05ef-e044-467a-a328-2b809372da97}" name="do_report" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" stack_size="1024" wcet="0" queue_size="1" miat="0" priority="1">
+    <Input_Parameter name="value" type="CounterValue" encoding="NATIVE"/>
+</Provided_Interface>
+
+<Required_Interface id="{d525823d-de69-4e34-a926-69d70ee915f6}" name="do_reset" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" stack_size="1024" wcet="0" queue_size="1" miat="0" priority="1">
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+<Required_Interface id="{1e7595ce-737f-4578-af63-38a3f77531c3}" name="do_start" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" stack_size="1024" wcet="0" queue_size="1" miat="0" priority="1">
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+<Required_Interface id="{c93f4b01-b44e-4b34-abc5-20106774dda6}" name="do_stop" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" stack_size="1024" wcet="0" queue_size="1" miat="0" priority="1">
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+<Required_Interface id="{98d81907-47b9-4dd6-a07f-5f6e5984f704}" name="do_get" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" stack_size="1024" wcet="0" queue_size="1" miat="0" priority="1">
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+    <Implementations>
+        <Implementation name="default" language="SDL"/>
+    </Implementations>
+</Function>
+
+<Function id="{ca0835ed-473b-4f30-8868-7fa30010f2c5}" name="Counter" is_type="NO" language="SDL" default_implementation="default" fixed_system_element="NO" required_system_element="NO" instances_min="1" instances_max="1" startup_priority="1">
+    <Property name="TASTE_IV_Properties::Default_Codegen" value="Ada"/>
+<Provided_Interface id="{94205737-7de2-4468-8daf-ca3c26828bd9}" name="do_reset" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" stack_size="1024" wcet="0" queue_size="1" miat="0" priority="1">
+</Provided_Interface>
+
+<Provided_Interface id="{6de83cf3-1fe7-4671-9f43-5c98fc0f0343}" name="do_start" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" stack_size="1024" wcet="0" queue_size="1" miat="0" priority="1">
+</Provided_Interface>
+
+<Provided_Interface id="{76f9a978-deea-40f1-9a24-5ad79f721548}" name="do_stop" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" stack_size="1024" wcet="0" queue_size="1" miat="0" priority="1">
+</Provided_Interface>
+
+<Provided_Interface id="{2649a710-daf0-4840-a99e-0aa8d877703d}" name="do_get" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" stack_size="1024" wcet="0" queue_size="1" miat="0" priority="1">
+</Provided_Interface>
+
+<Provided_Interface id="{3ef99e05-1ad3-4c0e-b112-e59182f517c2}" name="tick" kind="Cyclic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" stack_size="1024" wcet="0" priority="1">
+</Provided_Interface>
+
+<Required_Interface id="{a5b368aa-b3e0-4e06-80b9-540467be2c09}" name="do_report" kind="Sporadic" enable_multicast="true" layer="default" required_system_element="NO" is_simulink_interface="false" stack_size="1024" wcet="0" queue_size="1" miat="0" priority="1">
+    <Input_Parameter name="value" type="CounterValue" encoding="NATIVE"/>
+    <Property name="Taste::InheritPI" value="true"/>
+    <Property name="Taste::Autonamed" value="true"/>
+</Required_Interface>
+
+    <Implementations>
+        <Implementation name="default" language="SDL"/>
+    </Implementations>
+</Function>
+
+<Connection id="{7eeb5be0-992e-43d9-91ed-f4ddac7d0a55}" name="Harness_do_start____Counter_do_start" required_system_element="NO">
+    <Source iface_id="{1e7595ce-737f-4578-af63-38a3f77531c3}" func_name="Harness" ri_name="do_start" />
+    <Target iface_id="{6de83cf3-1fe7-4671-9f43-5c98fc0f0343}" func_name="Counter" pi_name="do_start" />
+</Connection>
+
+<Connection id="{5307775c-1e84-4e8d-a578-33a14f2e2bb4}" name="Counter_do_report____Harness_do_report" required_system_element="NO">
+    <Source iface_id="{a5b368aa-b3e0-4e06-80b9-540467be2c09}" func_name="Counter" ri_name="do_report" />
+    <Target iface_id="{769c05ef-e044-467a-a328-2b809372da97}" func_name="Harness" pi_name="do_report" />
+</Connection>
+
+<Connection id="{cc090ef1-801c-4e4b-9b84-d0aaf50fe1b8}" name="Harness_do_get____Counter_do_get" required_system_element="NO">
+    <Source iface_id="{98d81907-47b9-4dd6-a07f-5f6e5984f704}" func_name="Harness" ri_name="do_get" />
+    <Target iface_id="{2649a710-daf0-4840-a99e-0aa8d877703d}" func_name="Counter" pi_name="do_get" />
+</Connection>
+
+<Connection id="{68590eda-523b-49a2-897d-d934e1dc5ec0}" name="Harness_do_stop____Counter_do_stop" required_system_element="NO">
+    <Source iface_id="{c93f4b01-b44e-4b34-abc5-20106774dda6}" func_name="Harness" ri_name="do_stop" />
+    <Target iface_id="{76f9a978-deea-40f1-9a24-5ad79f721548}" func_name="Counter" pi_name="do_stop" />
+</Connection>
+
+<Connection id="{5dd28f77-c3f6-4795-bf7e-e770d68c8edf}" name="Harness_do_reset____Counter_do_reset" required_system_element="NO">
+    <Source iface_id="{d525823d-de69-4e34-a926-69d70ee915f6}" func_name="Harness" ri_name="do_reset" />
+    <Target iface_id="{94205737-7de2-4468-8daf-ca3c26828bd9}" func_name="Counter" pi_name="do_reset" />
+</Connection>
+
+<Layer name="default" is_visible="true"/>
+
+</InterfaceView>

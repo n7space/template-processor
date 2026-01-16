@@ -1,0 +1,52 @@
+/* CIF PROCESS (250, 150), (150, 75) */
+/* CIF Keep Specific Geode _REQSERVER_ 'https://gitlab.esa.int/taste/demo' */
+process Counter;
+    /* CIF Keep Specific Geode Partition 'default' */
+    /* CIF TEXT (191, 0), (170, 140) */
+    DCL value CounterValue;
+    /* CIF ENDTEXT */
+    /* CIF START (461, 85), (70, 35) */
+    START;
+        /* CIF task (456, 140), (78, 35) */
+        task value := 0;
+        /* CIF NEXTSTATE (461, 190), (70, 35) */
+        NEXTSTATE Wait;
+    /* CIF state (533, 275), (70, 35) */
+    /* CIF Keep Specific Geode Partition 'default' */
+    state *;
+        /* CIF input (580, 330), (70, 35) */
+        input do_get;
+            /* CIF output (554, 385), (122, 35) */
+            output do_report(value);
+            /* CIF NEXTSTATE (580, 440), (70, 35) */
+            NEXTSTATE -;
+        /* CIF input (466, 330), (75, 35) */
+        input do_reset;
+            /* CIF task (464, 385), (78, 35) */
+            task value := 0;
+            /* CIF NEXTSTATE (469, 435), (70, 35) */
+            NEXTSTATE Wait;
+    endstate;
+    /* CIF state (769, 80), (70, 35) */
+    /* CIF Keep Specific Geode Partition 'default' */
+    state Count;
+        /* CIF input (831, 135), (70, 35) */
+        input do_stop;
+            /* CIF NEXTSTATE (832, 190), (70, 35) */
+            NEXTSTATE Wait;
+        /* CIF input (724, 135), (70, 35) */
+        input tick;
+            /* CIF task (697, 190), (123, 35) */
+            task value := value + 1;
+            /* CIF NEXTSTATE (724, 245), (70, 35) */
+            NEXTSTATE Count;
+    endstate;
+    /* CIF state (589, 81), (70, 35) */
+    /* CIF Keep Specific Geode Partition 'default' */
+    state Wait;
+        /* CIF input (587, 136), (72, 35) */
+        input do_start;
+            /* CIF NEXTSTATE (589, 191), (70, 35) */
+            NEXTSTATE Count;
+    endstate;
+endprocess Counter;
