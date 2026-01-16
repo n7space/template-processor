@@ -82,6 +82,17 @@ def generate_sdl_images(func):
         try:
             # Change to SDL/src directory to run opengeode
             original_dir = os.getcwd()
+            
+            # Get absolute path to output directory before changing directories
+            abs_output_dir = None
+            if output_directory:
+                abs_output_dir = os.path.abspath(output_directory)
+                print(f"Output directory (absolute): {abs_output_dir}")
+                print(f"Output directory exists: {os.path.exists(abs_output_dir)}")
+            
+            # Get absolute path to SDL directory
+            abs_sdl_path = os.path.abspath(sdl_path)
+            
             os.chdir(sdl_path)
             
             # Run OpenGEODE to generate PNG images
@@ -91,14 +102,31 @@ def generate_sdl_images(func):
                 capture_output=True
             )
             
-            # Find all generated PNG files
+            # Find all generated PNG files and move them to output directory
             png_files = glob.glob("*.png")
+            print(f"Found {len(png_files)} PNG files in {abs_sdl_path}")
+            
             for png_file in sorted(png_files):
-                # Get relative path from current working directory
-                rel_path = os.path.relpath(os.path.join(sdl_path, png_file), original_dir)
                 # Extract caption from filename (remove extension)
                 caption = os.path.splitext(png_file)[0].replace("-", " ").replace("_", " ")
-                images.append((rel_path, caption))
+                
+                # If output_directory is specified, copy the image there
+                if abs_output_dir and os.path.exists(abs_output_dir):
+                    import shutil
+                    # Since we're in the sdl_path directory, png_file is in current dir
+                    src_path = png_file
+                    # Create unique filename with function name to avoid collisions
+                    dest_filename = f"{func_lower}_{png_file}"
+                    dest_path = os.path.join(abs_output_dir, dest_filename)
+                    print(f"Copying {src_path} to {dest_path}")
+                    shutil.copy2(src_path, dest_path)
+                    # Use only the filename (no path) for markdown reference
+                    images.append((dest_filename, caption))
+                else:
+                    # Fallback: use relative path from original working directory
+                    abs_img_path = os.path.join(abs_sdl_path, png_file)
+                    rel_path = os.path.relpath(abs_img_path, original_dir)
+                    images.append((rel_path, caption))
             
             os.chdir(original_dir)
         except Exception as e:

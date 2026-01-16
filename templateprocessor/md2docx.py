@@ -54,7 +54,8 @@ def process_list_items(list_element: Tag, doc: Document, style_base: str, level=
         if nested_ol:
             process_list_items(nested_ol, doc, "List Number", level + 1)
 
-def embed_image(img : Tag, doc: Document):
+
+def embed_image(img: Tag, doc: Document, base_path: str = ""):
     img_src = img.get("src")
     img_title = img.get("title", "").strip()
     img_alt = img.get("alt", "").strip()
@@ -62,21 +63,31 @@ def embed_image(img : Tag, doc: Document):
     # Use title if available, otherwise use alt text
     caption_text = img_title if img_title else img_alt
 
-    if img_src and os.path.exists(img_src):
-        try:
-            doc.add_picture(img_src, width=Inches(IMAGE_WIDTH_IN_INCHES))
-            if caption_text:
-                caption_paragraph = doc.add_paragraph(caption_text)
-                caption_paragraph.style = "Caption"
-        except Exception:
-            # If image cannot be added, skip it silently
-            pass
+    if img_src:
+        # Try the image path as-is first, then relative to base_path
+        image_path = img_src
+        if not os.path.exists(image_path) and base_path:
+            image_path = os.path.join(base_path, img_src)
 
-def markdown_to_word_file(markdown_source: str, word_file_path: str):
-    doc = markdown_to_word_object(markdown_source)
+        if os.path.exists(image_path):
+            try:
+                doc.add_picture(image_path, width=Inches(IMAGE_WIDTH_IN_INCHES))
+                if caption_text:
+                    caption_paragraph = doc.add_paragraph(caption_text)
+                    caption_paragraph.style = "Caption"
+            except Exception:
+                # If image cannot be added, skip it silently
+                pass
+
+
+def markdown_to_word_file(
+    markdown_source: str, word_file_path: str, base_path: str = ""
+):
+    doc = markdown_to_word_object(markdown_source, base_path)
     doc.save(word_file_path)
 
-def markdown_to_word_object(markdown_source: str) -> Document:
+
+def markdown_to_word_object(markdown_source: str, base_path: str = "") -> Document:
     # Converting Markdown to HTML
     html_content = markdown2.markdown(markdown_source, extras=["tables", "wiki-tables"])
 
@@ -98,7 +109,7 @@ def markdown_to_word_object(markdown_source: str) -> Document:
             # Check if paragraph contains an image
             img = element.find("img")
             if img:
-                embed_image(img, doc)
+                embed_image(img, doc, base_path)
             else:
                 # Regular paragraph without image
                 paragraph = doc.add_paragraph()
