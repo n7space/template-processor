@@ -14,6 +14,7 @@ Changes:
 """
 
 import markdown2
+import logging
 import os
 from docx import Document
 from docx.shared import Inches
@@ -75,8 +76,8 @@ def embed_image(img: Tag, doc: Document, base_path: str = ""):
                 if caption_text:
                     caption_paragraph = doc.add_paragraph(caption_text)
                     caption_paragraph.style = "Caption"
-            except Exception:
-                # If image cannot be added, skip it silently
+            except Exception as e:
+                logging.error(f"Exception while adding image {e}")
                 pass
 
 
