@@ -1,0 +1,152 @@
+<%
+## Data Initialization
+# Get all functions
+
+funcs = []
+def get_function_children(func):
+    result = []
+    if func.nested_functions:
+        for nested in func.nested_functions:
+            result.append(nested)
+            result.extend(get_function_children(nested))
+    return result
+
+for func in interface_view.functions:
+    funcs.append(func)
+    funcs.extend(get_function_children(func))
+
+funcs.sort(key=lambda f: f.name.lower())
+
+# Get functions deployed to the target partition
+target_partition_name = values["TARGET"]
+
+deployed_funcs = []
+target_partition = None
+for node in deployment_view.nodes:
+    for partition in node.partitions:
+        if partition.name == target_partition_name:
+            target_partition = partition
+        
+deployed_func_names = [f.name for f in target_partition.functions]
+for fun in funcs:
+    if fun.name in deployed_func_names:
+        deployed_funcs.append(fun)
+
+# Only leaf functions are deployed, so a correction for parents must be applied
+for func in funcs:
+    if func.nested_functions:
+        for nested in func.nested_functions:
+            if nested in deployed_funcs and not func in deployed_funcs:
+                deployed_funcs.append(func)
+                deployed_func_names.append(func.name) 
+
+# Filter SDL functions only
+import os
+import subprocess
+import glob
+
+sdl_funcs = [func for func in deployed_funcs if func.language and func.language.value == "SDL"]
+
+# Generate SDL behavior diagrams using OpenGEODE
+def generate_sdl_images(func):
+    """Generate SDL images for a function using OpenGEODE"""
+    func_lower = func.name.lower()
+    images = []
+    
+    # Try different path patterns for SDL/src directory
+    # Pattern 1: work/{function}/SDL/src
+    sdl_path_1 = f"work/{func_lower}/SDL/src"
+    # Pattern 2: work/{function}/implem/{implementation}/SDL/src
+    sdl_path_2_pattern = f"work/{func_lower}/implem/*/SDL/src"
+    
+    sdl_paths = []
+    if os.path.exists(sdl_path_1):
+        sdl_paths.append(sdl_path_1)
+    else:
+        # Check for implementation-specific paths
+        matching_paths = glob.glob(sdl_path_2_pattern)
+        sdl_paths.extend(matching_paths)
+    
+    for sdl_path in sdl_paths:
+        if not os.path.exists(sdl_path):
+            continue
+            
+        # Find the system_structure.pr and function.pr files
+        system_pr = os.path.join(sdl_path, "system_structure.pr")
+        func_pr = os.path.join(sdl_path, f"{func_lower}.pr")
+        
+        if not os.path.exists(system_pr) or not os.path.exists(func_pr):
+            continue
+        
+        # Generate images using OpenGEODE
+        try:
+            # Change to SDL/src directory to run opengeode
+            original_dir = os.getcwd()
+            os.chdir(sdl_path)
+            
+            # Run OpenGEODE to generate PNG images
+            subprocess.run(
+                ["opengeode", "--png", "system_structure.pr", f"{func_lower}.pr"],
+                check=False,
+                capture_output=True
+            )
+            
+            # Find all generated PNG files
+            png_files = glob.glob("*.png")
+            for png_file in sorted(png_files):
+                # Get relative path from current working directory
+                rel_path = os.path.relpath(os.path.join(sdl_path, png_file), original_dir)
+                # Extract caption from filename (remove extension)
+                caption = os.path.splitext(png_file)[0].replace("-", " ").replace("_", " ")
+                images.append((rel_path, caption))
+            
+            os.chdir(original_dir)
+        except Exception as e:
+            # If OpenGEODE fails, just continue
+            if 'original_dir' in locals():
+                os.chdir(original_dir)
+            pass
+    
+    return images
+
+# Generate images for all SDL functions
+func_images = {}
+for func in sdl_funcs:
+    images = generate_sdl_images(func)
+    if images:
+        func_images[func.name] = images
+
+%>
+# Software Behaviour
+
+This section describes the behaviour of software components implemented in SDL.
+
+The behaviour of each SDL function is documented using state machine diagrams generated from the SDL implementation.
+
+% if not sdl_funcs:
+*No SDL functions found in the ${target_partition_name} partition.*
+% else:
+## SDL Functions
+
+The following functions are implemented in SDL and their behaviour is documented below:
+
+% for func in sdl_funcs:
+${"###"} ${func.name}
+
+**Description:** ${func.comment if func.comment else "No description available."}
+
+% if func.name in func_images and func_images[func.name]:
+**Behavioural Diagrams:**
+
+The following diagrams illustrate the behaviour of the ${func.name} function:
+
+% for (img_path, caption) in func_images[func.name]:
+![${func.name}](${img_path} "${caption}")
+
+% endfor
+% else:
+*No SDL diagrams available for this function. The function may not have SDL source files in the expected location, or OpenGEODE image generation was not successful.*
+% endif
+
+% endfor
+% endif
