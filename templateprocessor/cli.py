@@ -2,7 +2,6 @@
 Command Line Interface for Template Processor
 """
 
-import os
 import logging
 import argparse
 from pathlib import Path
@@ -179,8 +178,7 @@ def instantiate(
         logging.debug(f"Instantiation:\n {instantiated_template}")
         output = str(Path(output_directory) / f"{name}")
         logging.debug(f"Postprocessing with {postprocessor_type}")
-        #      base_path = os.getcwd()
-        #      logging.debug(f"Base path set to {base_path}")
+        # Base directory for postprocessing is the output directory
         postprocessor.process(
             postprocessor_type, instantiated_template, output, output_directory
         )
