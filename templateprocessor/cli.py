@@ -179,10 +179,10 @@ def instantiate(
         logging.debug(f"Instantiation:\n {instantiated_template}")
         output = str(Path(output_directory) / f"{name}")
         logging.debug(f"Postprocessing with {postprocessor_type}")
-        base_path = os.getcwd()
-        logging.debug(f"Base path set to {base_path}")
+        #      base_path = os.getcwd()
+        #      logging.debug(f"Base path set to {base_path}")
         postprocessor.process(
-            postprocessor_type, instantiated_template, output, base_path
+            postprocessor_type, instantiated_template, output, output_directory
         )
     except FileNotFoundError as e:
         logging.error(f"File not found: {e.filename}")
