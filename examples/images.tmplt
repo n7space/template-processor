@@ -1,0 +1,19 @@
+# Image Support Example
+
+This document demonstrates image support in the template processor.
+
+## Image Without Title
+
+Here is the first image without a title:
+
+![](test_image1.png)
+
+## Image With Title
+
+Here is the second image with a title:
+
+![test image 2](test_image2.jpg "Example Title for Image 2")
+
+## End
+
+This concludes the image support demonstration.

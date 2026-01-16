@@ -18,7 +18,6 @@ class PostprocessorType(Enum):
 
 
 class AbstractPostprocessor(ABC):
-
     @abstractmethod
     def process(self, text: str, base_file_name: str) -> None:
         """
@@ -32,14 +31,12 @@ class AbstractPostprocessor(ABC):
 
 
 class Md2docxPostprocessor(AbstractPostprocessor):
-
     def process(self, text: str, base_file_name: str) -> None:
         output_file_name = f"{base_file_name}.docx"
         md2docx.markdown_to_word_file(text, output_file_name)
 
 
 class Md2HtmlPostprocessor(AbstractPostprocessor):
-
     def process(self, text: str, base_file_name: str) -> None:
         output_file_name = f"{base_file_name}.html"
         html_content = markdown2.markdown(text, extras=["tables", "wiki-tables"])
@@ -48,7 +45,6 @@ class Md2HtmlPostprocessor(AbstractPostprocessor):
 
 
 class PassthroughPostprocessor(AbstractPostprocessor):
-
     def process(self, text: str, base_file_name: str) -> None:
         output_file_name = f"{base_file_name}.md"
         with open(output_file_name, "w") as f:

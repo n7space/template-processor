@@ -14,8 +14,12 @@ Changes:
 """
 
 import markdown2
+import os
 from docx import Document
+from docx.shared import Inches
 from bs4 import BeautifulSoup, Tag
+
+IMAGE_WIDTH_IN_INCHES = 6
 
 
 def get_element_text(element: Tag) -> str:
@@ -50,11 +54,27 @@ def process_list_items(list_element: Tag, doc: Document, style_base: str, level=
         if nested_ol:
             process_list_items(nested_ol, doc, "List Number", level + 1)
 
+def embed_image(img : Tag, doc: Document):
+    img_src = img.get("src")
+    img_title = img.get("title", "").strip()
+    img_alt = img.get("alt", "").strip()
+
+    # Use title if available, otherwise use alt text
+    caption_text = img_title if img_title else img_alt
+
+    if img_src and os.path.exists(img_src):
+        try:
+            doc.add_picture(img_src, width=Inches(IMAGE_WIDTH_IN_INCHES))
+            if caption_text:
+                caption_paragraph = doc.add_paragraph(caption_text)
+                caption_paragraph.style = "Caption"
+        except Exception:
+            # If image cannot be added, skip it silently
+            pass
 
 def markdown_to_word_file(markdown_source: str, word_file_path: str):
     doc = markdown_to_word_object(markdown_source)
     doc.save(word_file_path)
-
 
 def markdown_to_word_object(markdown_source: str) -> Document:
     # Converting Markdown to HTML
@@ -75,14 +95,20 @@ def markdown_to_word_object(markdown_source: str) -> Document:
         elif element.name == "h3":
             doc.add_heading(element.text, level=3)
         elif element.name == "p":
-            paragraph = doc.add_paragraph()
-            for child in element.children:
-                if child.name == "strong":
-                    paragraph.add_run(child.text).bold = True
-                elif child.name == "em":
-                    paragraph.add_run(child.text).italic = True
-                else:
-                    paragraph.add_run(child)
+            # Check if paragraph contains an image
+            img = element.find("img")
+            if img:
+                embed_image(img, doc)
+            else:
+                # Regular paragraph without image
+                paragraph = doc.add_paragraph()
+                for child in element.children:
+                    if child.name == "strong":
+                        paragraph.add_run(child.text).bold = True
+                    elif child.name == "em":
+                        paragraph.add_run(child.text).italic = True
+                    else:
+                        paragraph.add_run(child)
         elif element.name == "ul":
             process_list_items(element, doc, "List Bullet")
         elif element.name == "ol":
