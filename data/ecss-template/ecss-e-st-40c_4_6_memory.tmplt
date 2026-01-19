@@ -1,0 +1,8 @@
+<%
+memories = system_object_types["on_board_memory"]
+%>
+| ID | Name | Size | Alignment |
+| -  |  -   |  -   |    -      |
+% for idx, memory in enumerate(memories.instances):
+|${memory.values["ID"]}|${memory.values["Name"]}|${memory.values["Size"]}|${memory.values["Alignment"]}|
+% endfor
