@@ -145,7 +145,6 @@ for func in sdl_funcs:
         func_images[func.name] = images
 
 %>
-# Software Behaviour
 
 This section describes the behaviour of software components implemented in SDL.
 
