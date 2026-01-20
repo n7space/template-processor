@@ -1,0 +1,7 @@
+SDL-PROJECT-DATAVIEW DEFINITIONS ::=
+BEGIN
+
+   CounterValue ::= INTEGER (0 .. 10000)
+
+END
+

@@ -42,6 +42,7 @@ setup(
             'flake8>=6.0.0',
             'black>=23.0.0',
             'mypy>=1.0.0',
+            'pillow>=11.1.0'
         ],
     },
     entry_points={

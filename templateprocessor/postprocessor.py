@@ -18,29 +18,27 @@ class PostprocessorType(Enum):
 
 
 class AbstractPostprocessor(ABC):
-
     @abstractmethod
-    def process(self, text: str, base_file_name: str) -> None:
+    def process(self, text: str, base_file_name: str, base_path: str = "") -> None:
         """
         Process the input text and write to output file.
 
         Args:
             text: Input text string to process
             base_file_name: Path to output file, without extension
+            base_path: Base path for resolving relative image paths
         """
         pass
 
 
 class Md2docxPostprocessor(AbstractPostprocessor):
-
-    def process(self, text: str, base_file_name: str) -> None:
+    def process(self, text: str, base_file_name: str, base_path: str = "") -> None:
         output_file_name = f"{base_file_name}.docx"
-        md2docx.markdown_to_word_file(text, output_file_name)
+        md2docx.markdown_to_word_file(text, output_file_name, base_path)
 
 
 class Md2HtmlPostprocessor(AbstractPostprocessor):
-
-    def process(self, text: str, base_file_name: str) -> None:
+    def process(self, text: str, base_file_name: str, base_path: str = "") -> None:
         output_file_name = f"{base_file_name}.html"
         html_content = markdown2.markdown(text, extras=["tables", "wiki-tables"])
         with open(output_file_name, "w") as f:
@@ -48,8 +46,7 @@ class Md2HtmlPostprocessor(AbstractPostprocessor):
 
 
 class PassthroughPostprocessor(AbstractPostprocessor):
-
-    def process(self, text: str, base_file_name: str) -> None:
+    def process(self, text: str, base_file_name: str, base_path: str = "") -> None:
         output_file_name = f"{base_file_name}.md"
         with open(output_file_name, "w") as f:
             f.write(text)
@@ -62,7 +59,11 @@ class Postprocessor:
         self.registry = registry
 
     def process(
-        self, postprocessor_type: PostprocessorType, text: str, base_file_name: str
+        self,
+        postprocessor_type: PostprocessorType,
+        text: str,
+        base_file_name: str,
+        base_path: str = "",
     ) -> None:
         """
         Process the input text and write to output file based on processor type.
@@ -71,7 +72,8 @@ class Postprocessor:
             postprocessor_type: Desired postprocessor type
             text: Input text string to process
             base_file_name: Path to output file, without extension
+            base_path: Base path for resolving relative image paths
         """
         if postprocessor_type not in self.registry:
             raise ValueError(f"Not supported postprocessor {postprocessor_type.value}")
-        self.registry[postprocessor_type].process(text, base_file_name)
+        self.registry[postprocessor_type].process(text, base_file_name, base_path)

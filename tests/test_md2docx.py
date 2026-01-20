@@ -2,9 +2,12 @@
 Tests for md2docx module
 """
 
+import os
+import tempfile
 import pytest
 from docx.document import Document as DocumentType
 from templateprocessor.md2docx import markdown_to_word_object
+from PIL import Image
 
 
 class TestMarkdownToWordObject:
@@ -150,3 +153,106 @@ class TestMarkdownToWordObject:
         assert "Heading 1" in paragraphs[0].style.name
         assert "Heading 2" in paragraphs[1].style.name
         assert "Heading 3" in paragraphs[2].style.name
+
+    def test_image_without_title(self):
+        """Test converting markdown with an image without a title."""
+        # Create a temporary test image
+        with tempfile.NamedTemporaryFile(suffix=".png", delete=False) as tmp_img:
+            img = Image.new("RGB", (100, 100), color="red")
+            img.save(tmp_img.name)
+            tmp_img_path = tmp_img.name
+
+        try:
+            # Prepare markdown with image reference
+            markdown = f"![alt text]({tmp_img_path})"
+
+            # Execute
+            doc = markdown_to_word_object(markdown)
+
+            # Verify
+            assert isinstance(doc, DocumentType)
+            # Should have the image added
+            # Check that there are inline shapes (images) in the document
+            has_image = False
+            for paragraph in doc.paragraphs:
+                if paragraph._element.xpath(".//pic:pic"):
+                    has_image = True
+                    break
+            # Alternative check: document should have at least one run with an inline shape
+            for paragraph in doc.paragraphs:
+                for run in paragraph.runs:
+                    if hasattr(run._element, "xpath"):
+                        pics = run._element.xpath(".//pic:pic")
+                        if pics:
+                            has_image = True
+                            break
+
+            assert has_image, "Document should contain an image"
+
+        finally:
+            # Clean up temporary image
+            if os.path.exists(tmp_img_path):
+                os.unlink(tmp_img_path)
+
+    def test_image_with_title(self):
+        """Test converting markdown with an image with a title."""
+        # Create a temporary test image
+        with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as tmp_img:
+            img = Image.new("RGB", (100, 100), color="blue")
+            img.save(tmp_img.name)
+            tmp_img_path = tmp_img.name
+
+        try:
+            # Prepare markdown with image reference and title
+            markdown = f'![alt text]({tmp_img_path} "Test Image Title")'
+
+            # Execute
+            doc = markdown_to_word_object(markdown)
+
+            # Verify
+            assert isinstance(doc, DocumentType)
+
+            # Should have the image and a caption
+            has_image = False
+            has_caption = False
+
+            for paragraph in doc.paragraphs:
+                # Check for image
+                if paragraph._element.xpath(".//pic:pic"):
+                    has_image = True
+                # Check for caption
+                if (
+                    paragraph.style.name == "Caption"
+                    and "Test Image Title" in paragraph.text
+                ):
+                    has_caption = True
+
+            # Alternative check for images
+            if not has_image:
+                for paragraph in doc.paragraphs:
+                    for run in paragraph.runs:
+                        if hasattr(run._element, "xpath"):
+                            pics = run._element.xpath(".//pic:pic")
+                            if pics:
+                                has_image = True
+                                break
+
+            assert has_image, "Document should contain an image"
+            assert has_caption, "Document should contain a caption with the title"
+
+        finally:
+            # Clean up temporary image
+            if os.path.exists(tmp_img_path):
+                os.unlink(tmp_img_path)
+
+    def test_image_nonexistent_file(self):
+        """Test that nonexistent image files are handled gracefully."""
+        # Prepare markdown with reference to nonexistent image
+        markdown = "![alt text](nonexistent_image.png)"
+
+        # Execute
+        doc = markdown_to_word_object(markdown)
+
+        # Verify - should not crash, just skip the image
+        assert isinstance(doc, DocumentType)
+        # Document should be created but without any images

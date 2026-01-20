@@ -178,7 +178,10 @@ def instantiate(
         logging.debug(f"Instantiation:\n {instantiated_template}")
         output = str(Path(output_directory) / f"{name}")
         logging.debug(f"Postprocessing with {postprocessor_type}")
-        postprocessor.process(postprocessor_type, instantiated_template, output)
+        # Base directory for postprocessing is the output directory
+        postprocessor.process(
+            postprocessor_type, instantiated_template, output, output_directory
+        )
     except FileNotFoundError as e:
         logging.error(f"File not found: {e.filename}")
     except Exception as e:
@@ -216,7 +219,7 @@ def main():
     values = get_values_dictionary(args.value)
 
     logging.info(f"Instantiating the TemplateInstantiator")
-    instantiator = TemplateInstantiator(iv, dv, sots, values)
+    instantiator = TemplateInstantiator(iv, dv, sots, values, args.output)
 
     logging.info(f"Instantiating the Postprocessor")
     postprocessor = Postprocessor(

@@ -14,8 +14,13 @@ Changes:
 """
 
 import markdown2
+import logging
+import os
 from docx import Document
+from docx.shared import Inches
 from bs4 import BeautifulSoup, Tag
+
+IMAGE_WIDTH_IN_INCHES = 6
 
 
 def get_element_text(element: Tag) -> str:
@@ -51,12 +56,39 @@ def process_list_items(list_element: Tag, doc: Document, style_base: str, level=
             process_list_items(nested_ol, doc, "List Number", level + 1)
 
 
-def markdown_to_word_file(markdown_source: str, word_file_path: str):
-    doc = markdown_to_word_object(markdown_source)
+def embed_image(img: Tag, doc: Document, base_path: str = ""):
+    img_src = img.get("src")
+    img_title = img.get("title", "").strip()
+    img_alt = img.get("alt", "").strip()
+
+    # Use title if available, otherwise use alt text
+    caption_text = img_title if img_title else img_alt
+
+    if img_src:
+        # Try the image path as-is first, then relative to base_path
+        image_path = img_src
+        if not os.path.exists(image_path) and base_path:
+            image_path = os.path.join(base_path, img_src)
+
+        if os.path.exists(image_path):
+            try:
+                doc.add_picture(image_path, width=Inches(IMAGE_WIDTH_IN_INCHES))
+                if caption_text:
+                    caption_paragraph = doc.add_paragraph(caption_text)
+                    caption_paragraph.style = "Caption"
+            except Exception as e:
+                logging.error(f"Exception while adding image {e}")
+                pass
+
+
+def markdown_to_word_file(
+    markdown_source: str, word_file_path: str, base_path: str = ""
+):
+    doc = markdown_to_word_object(markdown_source, base_path)
     doc.save(word_file_path)
 
 
-def markdown_to_word_object(markdown_source: str) -> Document:
+def markdown_to_word_object(markdown_source: str, base_path: str = "") -> Document:
     # Converting Markdown to HTML
     html_content = markdown2.markdown(markdown_source, extras=["tables", "wiki-tables"])
 
@@ -75,14 +107,20 @@ def markdown_to_word_object(markdown_source: str) -> Document:
         elif element.name == "h3":
             doc.add_heading(element.text, level=3)
         elif element.name == "p":
-            paragraph = doc.add_paragraph()
-            for child in element.children:
-                if child.name == "strong":
-                    paragraph.add_run(child.text).bold = True
-                elif child.name == "em":
-                    paragraph.add_run(child.text).italic = True
-                else:
-                    paragraph.add_run(child)
+            # Check if paragraph contains an image
+            img = element.find("img")
+            if img:
+                embed_image(img, doc, base_path)
+            else:
+                # Regular paragraph without image
+                paragraph = doc.add_paragraph()
+                for child in element.children:
+                    if child.name == "strong":
+                        paragraph.add_run(child.text).bold = True
+                    elif child.name == "em":
+                        paragraph.add_run(child.text).italic = True
+                    else:
+                        paragraph.add_run(child)
         elif element.name == "ul":
             process_list_items(element, doc, "List Bullet")
         elif element.name == "ol":
