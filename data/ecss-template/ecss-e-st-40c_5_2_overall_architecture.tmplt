@@ -18,6 +18,8 @@ for func in interface_view.functions:
 funcs.sort(key=lambda f: f.name.lower())
 
 # Get functions deployed to the target partition
+if "TARGET" not in values or not values["TARGET"]:
+    raise Exception("This template requires TARGET to be defined and pointing to the desired partition name")
 target_partition_name = values["TARGET"]
 
 deployed_funcs = []
@@ -28,6 +30,9 @@ for node in deployment_view.nodes:
         if partition.name == target_partition_name:
             target_node = node
             target_partition = partition
+
+if target_partition is None:
+    raise Exception("TARGET partition not found, please check your Deployment View and TARGET definition ({})".format(target_partition_name))
         
 deployed_func_names = [f.name for f in target_partition.functions]
 for fun in funcs:
