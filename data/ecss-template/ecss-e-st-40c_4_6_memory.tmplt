@@ -1,8 +1,15 @@
 <%
-memories = system_object_types["on_board_memory"]
+try:
+	memories = system_object_types["on_board_memory"]
+except Exception:
+	memories = None
 %>
+% if memories is None:
+No on-board memories
+% else:
 | ID | Name | Size | Alignment |
 | -  |  -   |  -   |    -      |
 % for idx, memory in enumerate(memories.instances):
 |${memory.values["ID"]}|${memory.values["Name"]}|${memory.values["Size"]}|${memory.values["Alignment"]}|
 % endfor
+% endif
