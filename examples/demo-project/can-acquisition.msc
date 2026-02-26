@@ -1,0 +1,39 @@
+mscdocument CANAcquisition /* MSC AND */;
+    language ASN.1;
+    data dataview-uniq.asn;
+/* CIF MSCDOCUMENT (0, 0) (4252, 2327) */
+mscdocument CANAcquisition /* MSC LEAF */;
+    language ASN.1;
+    data dataview-uniq.asn;
+msc CANAcquisition;
+/* CIF INSTANCE (0, 58) (320, 85) (800, 2159) */
+instance Service_Frontend;
+/* CIF MESSAGE (161, 212) (934, 212) */
+out command to CANOpenMaster;
+endinstance;
+/* CIF INSTANCE (778, 58) (310, 85) (800, 2159) */
+instance CANOpenMaster;
+/* CIF MESSAGE (161, 212) (934, 212) */
+in command from Service_Frontend;
+/* CIF MESSAGE (934, 302) (1699, 302) */
+out pdu_out to CANOpenSlave;
+/* CIF MESSAGE (1699, 392) (934, 392) */
+in pdu_in from CANOpenSlave;
+/* CIF MESSAGE (934, 482) (2453, 482) */
+out submit to DataPool;
+endinstance;
+/* CIF INSTANCE (1556, 58) (286, 85) (800, 2159) */
+instance CANOpenSlave;
+/* CIF MESSAGE (934, 302) (1699, 302) */
+in pdu_out from CANOpenMaster;
+/* CIF MESSAGE (1699, 392) (934, 392) */
+out pdu_in to CANOpenMaster;
+endinstance;
+/* CIF INSTANCE (2357, 58) (188, 85) (800, 2159) */
+instance DataPool;
+/* CIF MESSAGE (934, 482) (2453, 482) */
+in submit from CANOpenMaster;
+endinstance;
+endmsc;
+endmscdocument;
+endmscdocument;

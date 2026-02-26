@@ -1,0 +1,114 @@
+<%
+## E2E Diagram Generation
+# Find all .msc files in the project directory
+
+import os
+import subprocess
+import glob
+
+# Find all .msc files in current directory and subdirectories
+msc_files = glob.glob("**/*.msc", recursive=True)
+msc_files.sort()
+
+# Find the interfaceview.xml file
+interfaceview_xml = None
+for candidate in ["interfaceview.xml"]:
+    if os.path.exists(candidate):
+        interfaceview_xml = candidate
+        break
+
+if not interfaceview_xml:
+    # Try to find it in subdirectories
+    candidates = glob.glob("**/interfaceview.xml", recursive=True)
+    if candidates:
+        interfaceview_xml = candidates[0]
+
+# Generate E2E diagrams using SpaceCreator
+def generate_e2e_diagram(msc_file, interfaceview_xml):
+    """Generate E2E diagram for an MSC file using SpaceCreator"""
+    
+    # Get base name without extension for output
+    msc_basename = os.path.splitext(os.path.basename(msc_file))[0]
+    output_png = f"{msc_basename}.png"
+    
+    # Store original directory
+    original_dir = os.getcwd()
+    
+    # Get absolute path to output directory before any directory changes
+    abs_output_dir = None
+    if output_directory:
+        abs_output_dir = os.path.abspath(output_directory)
+    
+    try:
+        # Get absolute paths
+        abs_msc_file = os.path.abspath(msc_file)
+        abs_interfaceview = os.path.abspath(interfaceview_xml)
+        
+        # Generate temporary output name in current directory
+        temp_output_png = output_png
+        
+        # Run SpaceCreator to generate E2E diagram
+        result = subprocess.run(
+            ["spacecreator.AppImage", "--e2eimagesaver", abs_interfaceview, abs_msc_file, temp_output_png],
+            check=False,
+            capture_output=True
+        )
+        
+        if result.returncode == 0 and os.path.exists(temp_output_png):
+            # Get caption from filename
+            caption = msc_basename.replace("-", " ").replace("_", " ")
+            
+            # If output_directory is specified, copy the image there
+            if abs_output_dir and os.path.exists(abs_output_dir):
+                import shutil
+                dest_path = os.path.join(abs_output_dir, output_png)
+                shutil.copy2(temp_output_png, dest_path)
+                # Clean up temporary file if it's not in output directory
+                if os.path.abspath(temp_output_png) != dest_path:
+                    os.remove(temp_output_png)
+                # Use only the filename (no path) for markdown reference
+                return (output_png, caption)
+            else:
+                # Use relative path from original working directory
+                abs_img_path = os.path.abspath(temp_output_png)
+                rel_path = os.path.relpath(abs_img_path, original_dir)
+                return (rel_path, caption)
+        else:
+            return None
+    except Exception as e:
+        return None
+
+# Generate diagrams for all MSC files
+msc_diagrams = []
+if interfaceview_xml:
+    for msc_file in msc_files:
+        result = generate_e2e_diagram(msc_file, interfaceview_xml)
+        if result:
+            msc_diagrams.append((msc_file, result[0], result[1]))
+
+%>
+
+This section presents end-to-end (E2E) messaging sequence diagrams generated from MSC (Message Sequence Chart) files.
+
+% if not interfaceview_xml:
+*Interface View XML file not found. Cannot generate E2E diagrams.*
+% elif not msc_files:
+*No MSC files found in the project directory.*
+% else:
+## E2E Sequence Diagrams
+
+The following E2E sequence diagrams have been generated from MSC files:
+
+% for (msc_file, img_path, caption) in msc_diagrams:
+${"###"} ${caption.title()}
+
+**Source:** `${msc_file}`
+
+![${caption}](${img_path} "${caption}")
+
+% endfor
+
+% if len(msc_diagrams) < len(msc_files):
+*Note: ${len(msc_files) - len(msc_diagrams)} MSC file(s) could not be processed. Ensure SpaceCreator is available and the MSC files are valid.*
+% endif
+% endif
