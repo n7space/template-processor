@@ -3,6 +3,7 @@ CONFIG -= qt
 CONFIG += generateC
 
 DISTFILES +=  $(HOME)/tool-inst/share/taste-types/taste-types.asn \
+    can-acquisition.msc \
     deploymentview.dv.xml
 DISTFILES += demo-project.msc
 DISTFILES += interfaceview.xml
