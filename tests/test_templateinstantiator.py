@@ -554,3 +554,77 @@ Description: ${values['description']}"""
         assert "Version: 2.1.0" in result
         assert "Author: Test Author" in result
         assert "Description: Test project description" in result
+
+    def test_interface_view_path_stored(self):
+        """interface_view_path passed to constructor is stored on the instantiator."""
+        iv = self.create_sample_interface_view()
+        dv = self.create_sample_deployment_view()
+        so_types = self.create_sample_system_object_types()
+
+        instantiator = TemplateInstantiator(
+            iv,
+            dv,
+            so_types,
+            {},
+            interface_view_path="/path/to/interfaceview.xml",
+        )
+
+        assert instantiator.interface_view_path == "/path/to/interfaceview.xml"
+
+    def test_deployment_view_path_stored(self):
+        """deployment_view_path passed to constructor is stored on the instantiator."""
+        iv = self.create_sample_interface_view()
+        dv = self.create_sample_deployment_view()
+        so_types = self.create_sample_system_object_types()
+
+        instantiator = TemplateInstantiator(
+            iv,
+            dv,
+            so_types,
+            {},
+            deployment_view_path="/path/to/deploymentview.dv.xml",
+        )
+
+        assert instantiator.deployment_view_path == "/path/to/deploymentview.dv.xml"
+
+    def test_interface_view_path_available_in_template(self):
+        """interface_view_path is accessible as a variable inside templates."""
+        iv = self.create_sample_interface_view()
+        dv = self.create_sample_deployment_view()
+        so_types = self.create_sample_system_object_types()
+
+        instantiator = TemplateInstantiator(
+            iv,
+            dv,
+            so_types,
+            {},
+            interface_view_path="/some/project/interfaceview.xml",
+        )
+
+        template = "IV path: ${interface_view_path}"
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            result = instantiator.instantiate(template, tmpdir)
+
+        assert result == "IV path: /some/project/interfaceview.xml"
+
+    def test_deployment_view_path_available_in_template(self):
+        """deployment_view_path is accessible as a variable inside templates."""
+        iv = self.create_sample_interface_view()
+        dv = self.create_sample_deployment_view()
+        so_types = self.create_sample_system_object_types()
+
+        instantiator = TemplateInstantiator(
+            iv,
+            dv,
+            so_types,
+            {},
+            deployment_view_path="/some/project/deploymentview.dv.xml",
+        )
+
+        template = "DV path: ${deployment_view_path}"
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            result = instantiator.instantiate(template, tmpdir)
+
+        assert result == "DV path: /some/project/deploymentview.dv.xml"
