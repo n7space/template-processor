@@ -1,4 +1,36 @@
 <%
+import os
+import subprocess
+
+## Generate Interface View diagram
+_iv_xml = interface_view_path if interface_view_path else None
+
+iv_diagram_path = None
+if _iv_xml:
+    _iv_image_filename = "iv_logical_architecture.png"
+    _original_dir = os.getcwd()
+    _abs_output_dir = os.path.abspath(output_directory) if output_directory else None
+    try:
+        _abs_iv_xml = os.path.abspath(_iv_xml)
+        _result = subprocess.run(
+            ["spacecreator.AppImage", "--diagramexporter",
+             "--interfaceview-path", _abs_iv_xml,
+             "--image-path", _iv_image_filename],
+            check=False,
+            capture_output=True
+        )
+        if _result.returncode == 0 and os.path.exists(_iv_image_filename):
+            if _abs_output_dir and os.path.exists(_abs_output_dir):
+                import shutil
+                _dest_path = os.path.join(_abs_output_dir, _iv_image_filename)
+                shutil.copy2(_iv_image_filename, _dest_path)
+                iv_diagram_path = _iv_image_filename
+            else:
+                _abs_img = os.path.abspath(_iv_image_filename)
+                iv_diagram_path = os.path.relpath(_abs_img, _original_dir)
+    except Exception:
+        pass
+
 ## Data Initialization
 # Get all functions
 
@@ -56,6 +88,13 @@ for func in deployed_funcs:
 
 The software architecture of ${target_partition_name} consists of ${len(deployed_funcs)} functions deployed onto ${target_node.name} node.
 The functions use the following implementation technologies: ${",".join([l.value for l in languages])}.
+% if iv_diagram_path:
+
+The logical architecture is presented in the Figure below:
+
+![Logical architecture](${iv_diagram_path} "Logical architecture")
+
+% endif
 The top-level components are as follows:
 % for func in interface_view.functions:
 <%
