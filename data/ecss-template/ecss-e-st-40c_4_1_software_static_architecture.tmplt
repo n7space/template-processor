@@ -22,8 +22,8 @@ if _iv_xml:
         if _result.returncode == 0 and os.path.exists(_iv_image_filename):
             if _abs_output_dir and os.path.exists(_abs_output_dir):
                 import shutil
-                _dest_path = os.path.join(_abs_output_dir, _iv_image_filename)
-                shutil.copy2(_iv_image_filename, _dest_path)
+                shutil.copy2(_iv_image_filename, os.path.join(_abs_output_dir, _iv_image_filename))
+                os.remove(_iv_image_filename)
                 iv_diagram_path = _iv_image_filename
             else:
                 _abs_img = os.path.abspath(_iv_image_filename)
