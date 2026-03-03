@@ -220,7 +220,11 @@ def main():
 
     logging.info(f"Instantiating the TemplateInstantiator")
     instantiator = TemplateInstantiator(
-        iv, dv, sots, values, args.output,
+        iv,
+        dv,
+        sots,
+        values,
+        args.output,
         interface_view_path=args.iv or "",
         deployment_view_path=args.dv or "",
     )
