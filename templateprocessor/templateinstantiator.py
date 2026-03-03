@@ -21,6 +21,8 @@ class TemplateInstantiator:
     interface_view: InterfaceView
     deployment_view: DeploymentView
     output_directory: str
+    interface_view_path: str
+    deployment_view_path: str
 
     def __init__(
         self,
@@ -29,12 +31,16 @@ class TemplateInstantiator:
         system_object_types: Dict[str, SystemObjectType],
         values: Dict[str, str],
         output_directory: str = "",
+        interface_view_path: str = "",
+        deployment_view_path: str = "",
     ):
         self.system_object_types = system_object_types
         self.interface_view = interface_view
         self.deployment_view = deployment_view
         self.values = values
         self.output_directory = output_directory
+        self.interface_view_path = interface_view_path
+        self.deployment_view_path = deployment_view_path
 
     def instantiate(self, template: str, context_directory: str) -> str:
         mako_template = Template(text=template, module_directory=context_directory)
@@ -45,6 +51,8 @@ class TemplateInstantiator:
             "deployment_view": self.deployment_view,
             "values": self.values,
             "output_directory": self.output_directory,
+            "interface_view_path": self.interface_view_path,
+            "deployment_view_path": self.deployment_view_path,
         }
 
         instantiated_text = str(mako_template.render(**context))
