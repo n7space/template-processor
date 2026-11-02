@@ -34,7 +34,7 @@ class Language(str, Enum):
     SDL = "SDL"
     C = "C"
     ADA = "Ada"
-    CPP = "C++"
+    CPP = "CPP"
     SIMULINK = "Simulink"
     QGenc = "QGenc"
     GUI = "GUI"
